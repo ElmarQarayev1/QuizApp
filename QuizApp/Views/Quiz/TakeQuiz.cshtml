@@ -1,0 +1,111 @@
+﻿@model QuizViewModel
+
+<style>
+    body {
+        background-color: #f0f8ff;
+        font-family: Arial, sans-serif;
+    }
+
+    h2 {
+        color: #1E88E5;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #timer {
+        background-color: white;
+        color: #E53935;
+        text-align: center;
+        padding: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    form {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h4 {
+        color: #1565C0;
+    }
+
+    label {
+        font-weight: bold;
+        color: #1E88E5;
+    }
+
+    .btn-success {
+        background-color: #1E88E5;
+        border-color: #1E88E5;
+        color: white;
+    }
+
+        .btn-success:hover {
+            background-color: #1565C0;
+        }
+
+    .btn-disabled {
+        background-color: gray !important;
+        border-color: gray !important;
+        color: white !important;
+    }
+</style>
+
+<h2>@Model.Title</h2>
+
+<div id="timer">
+    <p>İmtahan üçün 1 saat vaxtınız var</p>
+</div>
+
+<form asp-action="CalculateResult" method="post" id="quizForm">
+    <input type="hidden" name="QuizId" value="@Model.QuizId" />
+
+    @for (int i = 0; i < Model.Questions.Count; i++)
+    {
+        <div>
+            <h4>@Model.Questions[i].Text</h4>
+            @for (int j = 0; j < Model.Questions[i].Answers.Count; j++)
+            {
+                <div>
+                    <input type="radio"
+                           name="Answers[@i].SelectedAnswerId"
+                           value="@Model.Questions[i].Answers[j].AnswerId"
+                           required />
+                    <label>@Model.Questions[i].Answers[j].Text</label>
+                </div>
+            }
+            <input type="hidden" name="Answers[@i].QuestionId" value="@Model.Questions[i].QuestionId" />
+        </div>
+    }
+
+    <button type="submit" class="btn btn-success" id="submitButton">İmtahanı Bitir</button>
+</form>
+
+<script>var totalTime = 60 * 60;
+    var timerDisplay = document.getElementById("timer");
+    var submitButton = document.getElementById("submitButton");
+
+    function updateTimer() {
+        var minutes = Math.floor(totalTime / 60);
+        var seconds = totalTime % 60;
+
+        timerDisplay.innerHTML = "<p>İmtahan üçün 1 saat vaxtınız var</p><p>Qalan vaxt: " + minutes.toString().padStart(2, '0') + ":" + seconds.toString().padStart(2, '0') + "</p>";
+
+        if (totalTime <= 0) {
+            submitButton.disabled = true;
+            submitButton.textContent = "Vaxt Bitdi!";
+            submitButton.classList.add("btn-disabled");
+        } else {
+            totalTime--;
+            setTimeout(updateTimer, 1000);
+        }
+    }
+    window.onload = function () {
+        updateTimer();
+    };</script>

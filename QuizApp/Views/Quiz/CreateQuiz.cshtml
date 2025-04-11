@@ -1,0 +1,75 @@
+﻿@model QuizApp.Models.ViewModels.QuizCreateViewModel
+
+<style>
+    body {
+        background-color: #ffffff; /* White background for the whole page */
+        font-family: Arial, sans-serif;
+    }
+
+    h2 {
+        color: #1E88E5;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        background-color: white; /* White background for form group */
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .form-group:hover {
+            transform: scale(1.02);
+        }
+
+    label {
+        color: #1565C0;
+        font-weight: bold;
+    }
+
+    .form-control {
+        border: 1px solid #1E88E5;
+        border-radius: 5px;
+    }
+
+        .form-control:focus {
+            border-color: #1565C0;
+            box-shadow: 0 0 5px rgba(30, 136, 229, 0.5);
+        }
+
+    .btn-success {
+        background-color: #1E88E5;
+        border-color: #1E88E5;
+        color: white;
+    }
+
+        .btn-success:hover {
+            background-color: #1565C0;
+        }
+
+    .btn-secondary {
+        background-color: #64B5F6;
+        border-color: #64B5F6;
+        color: white;
+    }
+
+        .btn-secondary:hover {
+            background-color: #42A5F5;
+        }
+
+
+</style>
+<h2>Yeni Quiz Yarat</h2>
+
+<form asp-action="CreateQuiz" method="post">
+    <div class="form-group">
+        <label asp-for="Title">Quiz Başlığı</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Quiz Yarat</button>
+    <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+</form>

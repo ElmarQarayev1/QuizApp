@@ -14,7 +14,7 @@
 
     #timer {
         background-color: white;
-        color: #E53935;
+        color: revert;
         text-align: center;
         padding: 10px;
         font-size: 20px;
@@ -60,7 +60,7 @@
 <h2>@Model.Title</h2>
 
 <div id="timer">
-    <p>İmtahan üçün 1 saat vaxtınız var</p>
+   
 </div>
 
 <form asp-action="CalculateResult" method="post" id="quizForm">
@@ -76,7 +76,7 @@
                     <input type="radio"
                            name="Answers[@i].SelectedAnswerId"
                            value="@Model.Questions[i].Answers[j].AnswerId"
-                           required />
+                            />
                     <label>@Model.Questions[i].Answers[j].Text</label>
                 </div>
             }
@@ -95,7 +95,7 @@
         var minutes = Math.floor(totalTime / 60);
         var seconds = totalTime % 60;
 
-        timerDisplay.innerHTML = "<p>İmtahan üçün 1 saat vaxtınız var</p><p>Qalan vaxt: " + minutes.toString().padStart(2, '0') + ":" + seconds.toString().padStart(2, '0') + "</p>";
+        timerDisplay.innerHTML = "<p>Qalan vaxt: " + minutes.toString().padStart(2, '0') + ":" + seconds.toString().padStart(2, '0') + "</p>";
 
         if (totalTime <= 0) {
             submitButton.disabled = true;

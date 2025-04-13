@@ -54,7 +54,7 @@
         }
 </style>
 
-<h2>Quiz Siyahısı</h2>
+
 
 <table class="table">
     <thead>
@@ -69,6 +69,12 @@
             <tr>
                 <td>@quiz.Title</td>
                 <td>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <a href="@Url.Action("Edit", "Quiz", new { id = quiz.Id })" class="btn btn-warning">Redaktə et</a>
+                        <a href="@Url.Action("Delete", "Quiz", new { id = quiz.Id })" class="btn btn-danger" onclick="return confirm('Bu quizi silmək istədiyinizə əminsinizmi?')">Sil</a>
+                    }
+                          
                     <a asp-action="TakeQuiz" asp-route-id="@quiz.Id" class="btn btn-primary">İmtahana Başla</a>
                 </td>
             </tr>

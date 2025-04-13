@@ -12,8 +12,8 @@ using QuizApp.Data;
 namespace QuizApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250409173524_identitychange")]
-    partial class identitychange
+    [Migration("20250412110147_createdtables")]
+    partial class createdtables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -91,6 +91,12 @@
         .text-danger {
             color: #ff0000; /* Qırmızı xəta mətn rəngi */
         }
+        .rounded-image {
+            border-radius: 15px; /* Küncləri hamarlaşdırmaq üçün */
+            border: 2px solid #ccc; /* Şəkilin ətrafında incə bir çərçivə */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Yüngül kölgə effekti */
+        }
+
     </style>
 </head>
 
@@ -109,8 +115,12 @@
                 <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
                     <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
                         <div class="d-flex align-items-center justify-content-between mb-3">
-                            <a href="index.html" class="">
-                                <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>AsanXidmət </h3>
+                            <a asp-action="login" asp-controller="account" class="">
+                                <img src="~/img/asanx.jpeg" height="90px" width="200px" alt="Asanx Sekli" class="rounded-image">
+
+
+
+
                             </a>
                             <h3>Login</h3>
                         </div>

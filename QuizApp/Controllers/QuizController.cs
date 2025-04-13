@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using QuizApp.Data;
 using QuizApp.Models;
 using QuizApp.Models.ViewModels;
@@ -17,7 +19,58 @@ namespace QuizApp.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Edit(int id)
+        {
+            var quiz = _context.Quizzes.FirstOrDefault(q => q.Id == id);
+            if (quiz == null)
+            {
+                return NotFound();
+            }
+
+            var model = new QuizCreateViewModel
+            {
+                Title = quiz.Title
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int id, QuizCreateViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var quiz = _context.Quizzes.FirstOrDefault(q => q.Id == id);
+            if (quiz == null)
+            {
+                return NotFound();
+            }
+
+            quiz.Title = model.Title;
+            _context.Quizzes.Update(quiz);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+       
+        public IActionResult Delete(int id)
+        {
+            var quiz = _context.Quizzes.FirstOrDefault(q => q.Id == id);
+            if (quiz == null)
+            {
+                return NotFound();
+            }
+
+            _context.Quizzes.Remove(quiz);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+    
+    public IActionResult Index()
         {
             var quizzes = _context.Quizzes.ToList();
             return View(quizzes);
@@ -72,8 +125,7 @@ namespace QuizApp.Controllers
 
             return View(quiz);
         }
-
-      
+  
         public IActionResult CreateQuestion()
         {
             ViewBag.Quizzes = _context.Quizzes.ToList(); 
@@ -112,7 +164,6 @@ namespace QuizApp.Controllers
 
 
 
-        [HttpPost]
         public IActionResult CalculateResult(QuizSubmissionViewModel model)
         {
             if (model.Answers == null || model.Answers.Count == 0)
@@ -122,16 +173,39 @@ namespace QuizApp.Controllers
             }
 
             int correctAnswers = 0;
+            var wrongQuestions = new List<QuestionResultViewModel>();
+            var correctQuestions = new List<QuestionResultViewModel>();  // Düzgün cavablar üçün yeni siyahı
 
             foreach (var answer in model.Answers)
             {
-                bool isCorrect = _context.Answers
-                    .Where(a => a.QuestionId == answer.QuestionId && a.IsCorrect)
-                    .Any(a => a.Id == answer.SelectedAnswerId);
+                var question = _context.Questions.Include(q => q.Answers).FirstOrDefault(q => q.Id == answer.QuestionId);
+                if (question == null) continue;
+
+                var correct = question.Answers.FirstOrDefault(a => a.IsCorrect);
+                var selected = question.Answers.FirstOrDefault(a => a.Id == answer.SelectedAnswerId);
+
+                bool isCorrect = correct != null && selected != null && correct.Id == selected.Id;
 
                 if (isCorrect)
                 {
                     correctAnswers++;
+                    correctQuestions.Add(new QuestionResultViewModel
+                    {
+                        QuestionText = question.Text,
+                        Answers = question.Answers.Select(a => a.Text).ToList(),
+                        SelectedAnswer = selected?.Text ?? "Seçilməyib",
+                        CorrectAnswer = correct?.Text ?? "Tapılmadı"
+                    });
+                }
+                else
+                {
+                    wrongQuestions.Add(new QuestionResultViewModel
+                    {
+                        QuestionText = question.Text,
+                        Answers = question.Answers.Select(a => a.Text).ToList(),
+                        SelectedAnswer = selected?.Text ?? "Seçilməyib",
+                        CorrectAnswer = correct?.Text ?? "Tapılmadı"
+                    });
                 }
             }
 
@@ -143,11 +217,42 @@ namespace QuizApp.Controllers
                 QuizId = model.QuizId,
                 CorrectAnswers = correctAnswers,
                 WrongAnswers = wrongAnswers,
-                TotalQuestions = totalQuestions
+                TotalQuestions = totalQuestions,
+                UserName = User.Identity.Name,
+                WrongQuestions = wrongQuestions,
+                CorrectQuestions = correctQuestions  // Düzgün cavabları əlavə et
             };
+
+            TempData["WrongQuestions"] = JsonSerializer.Serialize(result.WrongQuestions);
+            TempData["CorrectQuestions"] = JsonSerializer.Serialize(result.CorrectQuestions);  // Düzgün cavabları TempData-da saxla
 
             return View("Result", result);
         }
+
+
+        public IActionResult ReviewWrongQuestions()
+        {
+            var wrongQuestionsData = TempData["WrongQuestions"] as string;
+            var correctQuestionsData = TempData["CorrectQuestions"] as string;
+
+            var wrongQuestions = !string.IsNullOrEmpty(wrongQuestionsData)
+                ? JsonSerializer.Deserialize<List<QuestionResultViewModel>>(wrongQuestionsData)
+                : new List<QuestionResultViewModel>();
+
+            var correctQuestions = !string.IsNullOrEmpty(correctQuestionsData)
+                ? JsonSerializer.Deserialize<List<QuestionResultViewModel>>(correctQuestionsData)
+                : new List<QuestionResultViewModel>();
+
+            var model = new QuizReviewViewModel
+            {
+                WrongQuestions = wrongQuestions,
+                CorrectQuestions = correctQuestions
+            };
+
+            return View(model);
+        }
+
+
     }
 }
 

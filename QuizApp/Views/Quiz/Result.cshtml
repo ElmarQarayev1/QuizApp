@@ -49,10 +49,12 @@
 
 <div class="result-container">
     <h2>İmtahan Nəticəsi</h2>
-
+    <p><strong>İmtahan Verən:</strong> @Model.UserName</p>
     <p><strong>Düzgün Cavablar:</strong> @Model.CorrectAnswers</p>
     <p><strong>Səhv Cavablar:</strong> @Model.WrongAnswers</p>
     <p><strong>Ümumi Suallar:</strong> @Model.TotalQuestions</p>
+
+    <a asp-action="ReviewWrongQuestions" asp-route-id="@Model.QuizId" class="btn-primary"> Cavabları Nəzərdən Keçir</a>
 
     <a asp-action="Index" class="btn-primary">Ana Səhifəyə Qayıt</a>
 </div>

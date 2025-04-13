@@ -8,6 +8,10 @@ namespace QuizApp.Models.ViewModels
         public int CorrectAnswers { get; set; }
         public int WrongAnswers { get; set; }
         public int TotalQuestions { get; set; }
+        public string UserName { get; set; }
+        public List<QuestionResultViewModel> WrongQuestions { get; set; }
+        public List<QuestionResultViewModel> CorrectQuestions { get; set; }
+
     }
 
 }

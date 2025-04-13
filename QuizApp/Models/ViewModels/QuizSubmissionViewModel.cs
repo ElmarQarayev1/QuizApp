@@ -6,6 +6,7 @@ namespace QuizApp.Models.ViewModels
       
         public int QuizId { get; set; }
         public List<UserAnswerViewModel> Answers { get; set; } = new List<UserAnswerViewModel>();
+        public string UserName { get; set; }
     }
 }
 

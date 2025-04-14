@@ -55,6 +55,11 @@
         border-color: gray !important;
         color: white !important;
     }
+    .small-question-title {
+        font-size: 16px;
+        font-weight: normal;
+        margin-bottom: 10px;
+    }
 </style>
 
 <h2>@Model.Title</h2>
@@ -62,21 +67,19 @@
 <div id="timer">
    
 </div>
-
 <form asp-action="CalculateResult" method="post" id="quizForm">
     <input type="hidden" name="QuizId" value="@Model.QuizId" />
 
     @for (int i = 0; i < Model.Questions.Count; i++)
     {
         <div>
-            <h4>@Model.Questions[i].Text</h4>
+            <h4 class="small-question-title">@Model.Questions[i].Text</h4>
             @for (int j = 0; j < Model.Questions[i].Answers.Count; j++)
             {
                 <div>
                     <input type="radio"
                            name="Answers[@i].SelectedAnswerId"
-                           value="@Model.Questions[i].Answers[j].AnswerId"
-                            />
+                           value="@Model.Questions[i].Answers[j].AnswerId" />
                     <label>@Model.Questions[i].Answers[j].Text</label>
                 </div>
             }
@@ -86,7 +89,6 @@
 
     <button type="submit" class="btn btn-success" id="submitButton">İmtahanı Bitir</button>
 </form>
-
 <script>var totalTime = 60 * 60;
     var timerDisplay = document.getElementById("timer");
     var submitButton = document.getElementById("submitButton");

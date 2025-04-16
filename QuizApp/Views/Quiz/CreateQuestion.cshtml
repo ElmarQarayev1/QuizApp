@@ -3,14 +3,15 @@
 @{
     ViewData["Title"] = "Yeni Sual Əlavə Et";
 }
+
 <style>
     body {
-        background-color: #f0f8ff; 
+        background-color: #f0f8ff;
         font-family: Arial, sans-serif;
     }
 
     h2 {
-        color: #1E88E5; 
+        color: #1E88E5;
         text-align: center;
         margin-bottom: 20px;
     }
@@ -20,6 +21,8 @@
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease-in-out;
+        padding: 20px;
+        margin-bottom: 20px;
     }
 
         .question-item:hover {
@@ -31,7 +34,7 @@
     }
 
     .form-control {
-        border: 1px solid #1E88E5; 
+        border: 1px solid #1E88E5;
         border-radius: 5px;
     }
 
@@ -69,18 +72,24 @@
         }
 
     .answer-item {
-        background-color: #E3F2FD; 
+        background-color: #E3F2FD;
         padding: 10px;
         border-radius: 5px;
+        margin-bottom: 10px;
     }
 
+    .delete-question {
+        margin-top: 10px;
+    }
 </style>
+
 <h2>Yeni Suallar Əlavə Et</h2>
 
 <form asp-action="CreateQuestions" method="post">
     <div id="questions">
-        <div class="question-item border p-3 mb-3">
+        <div class="question-item">
             <h4>Sual <span class="question-index">1</span></h4>
+
             <div class="mb-3">
                 <label class="form-label">Sual Mətni</label>
                 <input type="text" name="models[0].Text" class="form-control" placeholder="Sual daxil edin" />
@@ -98,13 +107,14 @@
 
             <h5>Cavablar</h5>
             <div class="answers">
-                <div class="answer-item mb-2">
+                <div class="answer-item">
                     <input type="text" name="models[0].Answers[0].Text" class="form-control" placeholder="Cavab 1" />
                     <label><input type="checkbox" name="models[0].Answers[0].IsCorrect" value="true" /> Doğru Cavab</label>
                 </div>
             </div>
 
             <button type="button" class="btn btn-secondary btn-sm add-answer">Cavab Əlavə Et</button>
+            <button type="button" class="btn btn-danger btn-sm delete-question" style="margin-bottom:10px;">Sualı Sil</button>
         </div>
     </div>
 
@@ -112,25 +122,24 @@
     <button type="submit" class="btn btn-success">Saxla</button>
 </form>
 
-
-
 @section Scripts {
     <script>
         let questionCount = document.querySelectorAll(".question-item").length;
 
         function addQuestion() {
-            let questionIndex = questionCount;
+            let index = questionCount;
             let html = `
-                <div class="question-item border p-3 mb-3">
-                    <h4>Sual <span class="question-index">${questionIndex + 1}</span></h4>
+                <div class="question-item">
+                    <h4>Sual <span class="question-index">${index + 1}</span></h4>
+
                     <div class="mb-3">
                         <label class="form-label">Sual Mətni</label>
-                        <input type="text" name="models[${questionIndex}].Text" class="form-control" placeholder="Sual daxil edin" />
+                        <input type="text" name="models[${index}].Text" class="form-control" placeholder="Sual daxil edin" />
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Hansı Quizə aiddir?</label>
-                        <select name="models[${questionIndex}].QuizId" class="form-control">
+                        <select name="models[${index}].QuizId" class="form-control">
                             @foreach (var quiz in ViewBag.Quizzes)
                             {
                                 <option value="@quiz.Id">@quiz.Title</option>
@@ -140,13 +149,14 @@
 
                     <h5>Cavablar</h5>
                     <div class="answers">
-                        <div class="answer-item mb-2">
-                            <input type="text" name="models[${questionIndex}].Answers[0].Text" class="form-control" placeholder="Cavab 1" />
-                            <label><input type="checkbox" name="models[${questionIndex}].Answers[0].IsCorrect" value="true" /> Doğru Cavab</label>
+                        <div class="answer-item">
+                            <input type="text" name="models[${index}].Answers[0].Text" class="form-control" placeholder="Cavab 1" />
+                            <label><input type="checkbox" name="models[${index}].Answers[0].IsCorrect" value="true" /> Doğru Cavab</label>
                         </div>
                     </div>
 
                     <button type="button" class="btn btn-secondary btn-sm add-answer">Cavab Əlavə Et</button>
+                    <button type="button" class="btn btn-danger btn-sm delete-question">Sualı Sil</button>
                 </div>
             `;
             document.getElementById("questions").insertAdjacentHTML("beforeend", html);
@@ -161,16 +171,40 @@
                 let answerCount = answersDiv.querySelectorAll(".answer-item").length;
 
                 let html = `
-                    <div class="answer-item mb-2">
+                    <div class="answer-item">
                         <input type="text" name="models[${questionIndex}].Answers[${answerCount}].Text" class="form-control" placeholder="Cavab ${answerCount + 1}" />
                         <label><input type="checkbox" name="models[${questionIndex}].Answers[${answerCount}].IsCorrect" value="true" /> Doğru Cavab</label>
                     </div>
                 `;
-
                 answersDiv.insertAdjacentHTML("beforeend", html);
             }
+
+            if (event.target.classList.contains("delete-question")) {
+                let questionDiv = event.target.closest(".question-item");
+                questionDiv.remove();
+                updateQuestionIndexes();
+            }
         });
+
+        function updateQuestionIndexes() {
+            let questionItems = document.querySelectorAll(".question-item");
+            questionItems.forEach((item, i) => {
+                item.querySelector(".question-index").textContent = i + 1;
+
+                item.querySelector("input[name^='models']").setAttribute("name", `models[${i}].Text`);
+                item.querySelector("select[name^='models']").setAttribute("name", `models[${i}].QuizId`);
+
+                let answerItems = item.querySelectorAll(".answer-item");
+                answerItems.forEach((answerItem, j) => {
+                    let inputText = answerItem.querySelector("input[type='text']");
+                    let inputCheckbox = answerItem.querySelector("input[type='checkbox']");
+
+                    inputText.setAttribute("name", `models[${i}].Answers[${j}].Text`);
+                    inputCheckbox.setAttribute("name", `models[${i}].Answers[${j}].IsCorrect`);
+                });
+            });
+
+            questionCount = questionItems.length;
+        }
     </script>
 }
-
-

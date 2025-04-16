@@ -13,7 +13,9 @@ namespace QuizApp.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.Now; 
 
-        public virtual ICollection<Question> Questions { get; set; } 
+        public virtual ICollection<Question> Questions { get; set; }
+
+        public int DurationInMinutes { get; set; }
     }
 }
 

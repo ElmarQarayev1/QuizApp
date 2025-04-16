@@ -29,7 +29,8 @@ namespace QuizApp.Controllers
 
             var model = new QuizCreateViewModel
             {
-                Title = quiz.Title
+                Title = quiz.Title,
+                DurationInMinutes=quiz.DurationInMinutes
             };
 
             return View(model);
@@ -50,6 +51,7 @@ namespace QuizApp.Controllers
             }
 
             quiz.Title = model.Title;
+            quiz.DurationInMinutes = model.DurationInMinutes;
             _context.Quizzes.Update(quiz);
             _context.SaveChanges();
 
@@ -91,7 +93,8 @@ namespace QuizApp.Controllers
             var quiz = new Quiz
             {
                 Title = model.Title,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
+                DurationInMinutes = model.DurationInMinutes
             };
 
             _context.Quizzes.Add(quiz);
@@ -108,6 +111,7 @@ namespace QuizApp.Controllers
                 {
                     QuizId = q.Id,
                     Title = q.Title,
+                    DurationInMinutes = q.DurationInMinutes,
                     Questions = q.Questions.Select(qn => new QuestionViewModel
                     {
                         QuestionId = qn.Id,
@@ -174,7 +178,7 @@ namespace QuizApp.Controllers
 
             int correctAnswers = 0;
             var wrongQuestions = new List<QuestionResultViewModel>();
-            var correctQuestions = new List<QuestionResultViewModel>();  // Düzgün cavablar üçün yeni siyahı
+            var correctQuestions = new List<QuestionResultViewModel>();  
 
             foreach (var answer in model.Answers)
             {
@@ -220,12 +224,11 @@ namespace QuizApp.Controllers
                 TotalQuestions = totalQuestions,
                 UserName = User.Identity.Name,
                 WrongQuestions = wrongQuestions,
-                CorrectQuestions = correctQuestions  // Düzgün cavabları əlavə et
+                CorrectQuestions = correctQuestions  
             };
 
             TempData["WrongQuestions"] = JsonSerializer.Serialize(result.WrongQuestions);
-            TempData["CorrectQuestions"] = JsonSerializer.Serialize(result.CorrectQuestions);  // Düzgün cavabları TempData-da saxla
-
+            TempData["CorrectQuestions"] = JsonSerializer.Serialize(result.CorrectQuestions);  
             return View("Result", result);
         }
 

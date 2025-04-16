@@ -12,6 +12,8 @@ namespace QuizApp.Models.ViewModels
         public int QuizId { get; set; }
 
         public List<AnswerCreateViewModel> Answers { get; set; } = new List<AnswerCreateViewModel>();
+
+
     }
 }
 

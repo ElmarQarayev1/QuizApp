@@ -31,14 +31,29 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    h4 {
-        color: #1565C0;
+    .question-block {
+        background-color: #e0e0e0; /* Boz fon */
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
     }
 
-    label {
+    h4.small-question-title {
+        font-size: 18px;
         font-weight: bold;
-        color: #1E88E5;
+        color: #000; /* Qara rəng */
+        margin-bottom: 10px;
     }
+
+    .answer-option {
+        margin-left: 20px;
+        margin-bottom: 8px;
+    }
+
+        .answer-option label {
+            font-weight: normal;
+            color: #1E88E5;
+        }
 
     .btn-success {
         background-color: #1E88E5;
@@ -55,41 +70,46 @@
         border-color: gray !important;
         color: white !important;
     }
-    .small-question-title {
-        font-size: 16px;
-        font-weight: normal;
-        margin-bottom: 10px;
-    }
 </style>
+
 
 <h2>@Model.Title</h2>
 
 <div id="timer">
-   
+
 </div>
 <form asp-action="CalculateResult" method="post" id="quizForm">
     <input type="hidden" name="QuizId" value="@Model.QuizId" />
 
     @for (int i = 0; i < Model.Questions.Count; i++)
     {
-        <div>
-            <h4 class="small-question-title">@Model.Questions[i].Text</h4>
+        <div class="question-block" style="background-color: #f2f2f2; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <h4 class="small-question-title" style="color: black;">@($"{i + 1}. {Model.Questions[i].Text}")</h4>
+
             @for (int j = 0; j < Model.Questions[i].Answers.Count; j++)
             {
-                <div>
+                var optionLabel = $"{(char)('A' + j)})";
+                var inputId = $"q_{i}_a_{j}";
+
+                <div class="answer-option" style="margin-left: 15px;">
                     <input type="radio"
                            name="Answers[@i].SelectedAnswerId"
-                           value="@Model.Questions[i].Answers[j].AnswerId" />
-                    <label>@Model.Questions[i].Answers[j].Text</label>
+                           value="@Model.Questions[i].Answers[j].AnswerId"
+                           id="@inputId" />
+                    <label for="@inputId" style="color: black;">@optionLabel @Model.Questions[i].Answers[j].Text</label>
                 </div>
             }
+
             <input type="hidden" name="Answers[@i].QuestionId" value="@Model.Questions[i].QuestionId" />
         </div>
     }
 
     <button type="submit" class="btn btn-success" id="submitButton">İmtahanı Bitir</button>
 </form>
-<script>var totalTime = 60 * 60;
+
+
+<script>
+    var totalTime = @Model.DurationInMinutes * 60;
     var timerDisplay = document.getElementById("timer");
     var submitButton = document.getElementById("submitButton");
 
@@ -103,11 +123,15 @@
             submitButton.disabled = true;
             submitButton.textContent = "Vaxt Bitdi!";
             submitButton.classList.add("btn-disabled");
+            document.getElementById("quizForm").submit();
         } else {
             totalTime--;
             setTimeout(updateTimer, 1000);
         }
     }
+
     window.onload = function () {
         updateTimer();
-    };</script>
+    };
+</script>
+

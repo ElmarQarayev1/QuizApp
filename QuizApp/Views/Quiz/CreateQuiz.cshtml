@@ -1,0 +1,247 @@
+﻿@model QuizApp.Models.ViewModels.QuizCreateViewModel
+
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Arial', sans-serif;
+    }
+
+    h2.text-primary {
+        color: #007bff;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        transition: border-color 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: #007bff;
+        }
+
+    .btn-block {
+        width: 100%;
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #4e555b;
+        }
+
+    .mt-4 {
+        margin-top: 1.5rem;
+    }
+
+    .mt-3 {
+        margin-top: 1rem;
+    }
+
+    .mt-2 {
+        margin-top: 0.5rem;
+    }
+
+    .form-check-container {
+        margin-top: 10px;
+    }
+    .question-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+    }
+
+
+
+    .question-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        transition: background-color 0.3s ease;
+    }
+
+        .question-item:hover {
+            background-color: #f1f1f1;
+        }
+</style>
+<h2 class="text-primary">Yeni Quiz Yarat</h2>
+
+<form asp-action="CreateQuiz" method="post" class="mt-4">
+    <div class="form-group">
+        <label asp-for="Title">Quiz Başlığı</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DurationInMinutes">Vaxt (dəqiqə ilə)</label>
+        <input asp-for="DurationInMinutes" class="form-control" type="number" min="1" max="180" />
+        <span asp-validation-for="DurationInMinutes" class="text-danger"></span>
+    </div>
+
+    <div id="catalogsContainer">
+        <div class="form-group catalog-group">
+            <label>Catalog Seç</label>
+            <select class="form-control catalogSelect">
+                <option value="">-- Catalog seçin --</option>
+                @foreach (var catalog in Model.ExistingCatalogs)
+                {
+                    <option value="@catalog.Value">@catalog.Text</option>
+                }
+            </select>
+
+            <div class="questionsContainer" style="display:none;">
+                <label>Suallardan Seç</label>
+                <div class="list-group form-check-container questionsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-secondary btn-block mt-3" id="addCatalogButton">Yeni Kataloq Əlavə Et</button>
+
+    <button type="submit" class="btn btn-success btn-block mt-3">Quiz Yarat</button>
+    <a asp-action="Index" class="btn btn-secondary btn-block mt-2">Geri Dön</a>
+</form>
+
+<script>
+    let selectedQuestions = [];
+
+    const existingCatalogs = @Html.Raw(Json.Serialize(Model.ExistingCatalogs)); 
+
+    document.addEventListener("DOMContentLoaded", function () {
+        attachCatalogChangeListeners();
+    });
+
+    function attachCatalogChangeListeners() {
+        document.querySelectorAll(".catalogSelect").forEach(select => {
+            select.addEventListener("change", function () {
+                const catalogId = this.value;
+                const container = this.closest('.catalog-group').querySelector('.questionsContainer');
+                const list = container.querySelector('.questionsList');
+
+                if (!catalogId) {
+                    container.style.display = "none";
+                    list.innerHTML = "";
+                    return;
+                }
+
+                fetch(`/Quiz/GetQuestionsByCatalogId?catalogId=${catalogId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        list.innerHTML = "";
+                        if (data && data.length > 0) {
+                            data.forEach(q => {
+                                console.log("Sual:", q);
+                                if (!selectedQuestions.includes(q.id)) {
+                                    const checkbox = document.createElement("input");
+                                    checkbox.type = "checkbox";
+                                    checkbox.className = "form-check-input";
+                                    checkbox.name = "SelectedQuestionIds[]";
+                                    checkbox.value = q.id;
+                                     checkbox.id = `question_${q.id}_${Date.now()}`;
+                                    checkbox.onclick = function () {
+                                        if (checkbox.checked) {
+                                            selectedQuestions.push(q.id);
+                                        } else {
+                                            selectedQuestions = selectedQuestions.filter(id => id !== q.id);
+                                        }
+                                    };
+                                   
+                                    const label = document.createElement("label");
+                                    label.className = "form-check-label";
+                                    label.setAttribute("for", checkbox.id);
+                                    label.innerText = q.text;
+
+                                  
+                                    const questionImageContainer = document.createElement("div");
+                                    console.log("Şəkil tapıldı:", q.image);
+                                    if (q.image) {
+                                        const image = document.createElement("img");
+                                        image.src = q.image; 
+                                        image.alt = "Question Image";
+                                        image.className = "question-image";
+                                        image.style.maxWidth = "100px"; 
+                                        questionImageContainer.appendChild(image);
+                                    }
+                                    const div = document.createElement("div");
+                                    div.className = "question-item";
+                                    div.appendChild(checkbox);
+                                    div.appendChild(label);
+                                    div.appendChild(questionImageContainer); 
+
+                                    list.appendChild(div);
+                                }
+                            });
+                            container.style.display = "block";
+                        } else {
+                            list.innerHTML = "<p>Bu kataloq üçün heç bir sual tapılmadı.</p>";
+                            container.style.display = "block";
+                        }
+                    });
+
+            });
+        });
+    }
+
+    document.getElementById("addCatalogButton").addEventListener("click", function () {
+        const catalogsContainer = document.getElementById("catalogsContainer");
+
+        const newCatalogGroup = document.createElement("div");
+        newCatalogGroup.classList.add("form-group", "catalog-group");
+
+        const select = document.createElement("select");
+        select.classList.add("form-control", "catalogSelect");
+
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.text = "-- Catalog seçin --";
+        select.appendChild(defaultOption);
+
+        existingCatalogs.forEach(catalog => {
+            const option = document.createElement("option");
+            option.value = catalog.value;
+            option.text = catalog.text;
+            select.appendChild(option);
+        });
+
+        const questionsContainer = document.createElement("div");
+        questionsContainer.classList.add("questionsContainer");
+        questionsContainer.style.display = "none";
+        questionsContainer.innerHTML = `
+            <label>Suallardan Seç</label>
+            <div class="list-group form-check-container questionsList"></div>
+        `;
+
+        newCatalogGroup.appendChild(select);
+        newCatalogGroup.appendChild(questionsContainer);
+        catalogsContainer.appendChild(newCatalogGroup);
+
+        attachCatalogChangeListeners();
+    });
+  
+</script>

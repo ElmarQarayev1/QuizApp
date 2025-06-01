@@ -1,0 +1,124 @@
+﻿@model List<QuizApp.Models.Catalog>
+
+@{
+    ViewData["Title"] = "Kataloqlar";
+}
+
+<style>
+    body {
+        background-color: #ffffff; /* Arxa fon ağ */
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        padding: 40px;
+    }
+
+    .card {
+        background-color: #ffffff; /* Kartın fonu ağ */
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 123, 255, 0.2);
+        }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .btn-outline-primary {
+        border-color: #007bff;
+        color: #007bff;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+    .btn-outline-info {
+        border-color: #17a2b8;
+        color: #17a2b8;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        .btn-outline-info:hover {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+    .btn-outline-danger {
+        border-color: #dc3545;
+        color: #dc3545;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        .btn-outline-danger:hover {
+            background-color: #dc3545;
+            color: white;
+        }
+
+    .text-primary {
+        color: #007bff; /* Mavi başlıq */
+    }
+
+    .alert-info {
+        background-color: #eaf2f7;
+        color: #007bff;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        transition: background-color 0.3s;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+</style>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary">Kataloqlar</h2>
+        <a asp-action="Create" class="btn btn-primary">Yeni Kataloq Yarat</a>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var catalog in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-primary">@catalog.Title</h5>
+                            <div class="d-flex justify-content-center gap-2 mt-3">
+                                <a asp-action="Details" asp-route-id="@catalog.Id" class="btn btn-outline-info btn-sm">Detallar</a>
+                                <a asp-action="Edit" asp-route-id="@catalog.Id" class="btn btn-outline-primary btn-sm">Redaktə Et</a>
+                                @*<a asp-action="Delete" asp-route-id="@catalog.Id" class="btn btn-outline-danger btn-sm">Sil</a>*@
+                                <form asp-action="DeleteConfirmed" method="post">
+                                    <input type="hidden" name="id" value="@catalog.Id" />
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">Sil</button>
+                                   
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">
+            Heç bir kataloq mövcud deyil.
+        </div>
+    }
+</div>

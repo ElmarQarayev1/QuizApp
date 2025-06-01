@@ -1,0 +1,27 @@
+﻿@model QuizReviewViewModel
+
+<div class="container">
+    @*<h2 style="text-align:center; color:cadetblue;">Quiz Nəticəsi</h2>*@
+
+    <h3 style="color: green;">Düzgün Cavablar</h3>
+    @foreach (var q in Model.CorrectQuestions)
+    {
+        <div style="background: #e8f5e9; padding: 20px; margin: 10px; border-radius: 10px;">
+            <h4 style="color: black;">@q.QuestionText</h4>
+            <p><strong>Seçdiyin Cavab:</strong> <span style="color: green;">@q.SelectedAnswer</span></p>
+            <p><strong>Düzgün Cavab:</strong> <span style="color: green;">@q.CorrectAnswer</span></p>
+            <hr />
+        </div>
+    }
+
+    <h3 style="color: red;">Səhv Cavablar</h3>
+    @foreach (var q in Model.WrongQuestions)
+    {
+        <div style="background: #ffebee; padding: 20px; margin: 10px; border-radius: 10px;">
+            <h4 style="color: black;">@q.QuestionText</h4>
+            <p><strong>Seçdiyin Cavab:</strong> <span style="color: red;">@q.SelectedAnswer</span></p>
+            <p><strong>Düzgün Cavab:</strong> <span style="color: red;">@q.CorrectAnswer</span></p>
+            <hr />
+        </div>
+    }
+</div>

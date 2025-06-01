@@ -1,0 +1,44 @@
+﻿@model QuizApp.Models.ViewModels.CatalogDetailsViewModel
+
+@{
+    ViewData["Title"] = "Kataloq Detalları";
+}
+
+<div class="container mt-5">
+    <h2 class="text-primary mb-4">Kataloq Detalları: @Model.Catalog.Title</h2>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h5 class="card-title text-primary">Kataloq Haqqında</h5>
+            <a asp-action="Edit" asp-route-id="@Model.Catalog.Id" class="btn btn-outline-primary btn-sm">Redaktə Et</a>
+            <a asp-action="Delete" asp-route-id="@Model.Catalog.Id" class="btn btn-outline-danger btn-sm">Sil</a>
+        </div>
+    </div>
+
+    <h3 class="mt-5">Bu Kataloqa Aid Suallar</h3>
+
+    @if (Model.Questions != null && Model.Questions.Any())
+    {
+        <ul class="list-group">
+            @foreach (var question in Model.Questions)
+            {
+                <li class="list-group-item">
+                    <strong>@question.Text</strong>
+
+                    @if (!string.IsNullOrEmpty(question.ImageUrl))
+                    {
+                        <div class="mt-2">
+                            <img src="@question.ImageUrl" alt="Sual Şəkili" class="img-fluid rounded" style="max-width: 300px;" />
+                        </div>
+                    }
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            Bu kataloqda heç bir sual mövcud deyil.
+        </div>
+    }
+</div>

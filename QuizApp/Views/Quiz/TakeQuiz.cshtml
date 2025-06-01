@@ -1,0 +1,155 @@
+﻿@model QuizApp.Models.ViewModels.QuizViewModel
+
+<style>
+    body {
+        background-color: #f0f8ff;
+        font-family: Arial, sans-serif;
+    }
+
+    h2 {
+        color: #1E88E5;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #timer {
+        background-color: white;
+        color: black;
+        text-align: center;
+        padding: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    form {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .question-block {
+        background-color: #f2f2f2;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    h6.small-question-title {
+        font-size: 18px;
+        font-weight: normal;
+        color: black;
+        margin-bottom: 10px;
+    }
+
+    .answer-option {
+        margin-left: 20px;
+        margin-bottom: 8px;
+    }
+
+        .answer-option label {
+            font-weight: normal;
+            color: black;
+        }
+
+    .btn-success {
+        background-color: #1E88E5;
+        border-color: #1E88E5;
+        color: white;
+    }
+
+        .btn-success:hover {
+            background-color: #1565C0;
+        }
+
+    .btn-disabled {
+        background-color: gray !important;
+        border-color: gray !important;
+        color: white !important;
+    }
+
+    .question-image-container {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .question-image {
+        max-width: 100%;
+        max-height: 200px;
+        border-radius: 8px;
+    }
+</style>
+
+<h2>@Model.Title</h2>
+
+<div id="timer"></div>
+
+<form asp-action="CalculateResult" method="post" id="quizForm">
+    <input type="hidden" name="QuizId" value="@Model.QuizId" />
+
+    @for (int i = 0; i < Model.Questions.Count; i++)
+    {
+        var question = Model.Questions[i];
+
+        <div class="question-block">
+            <h6 class="small-question-title">@($"{i + 1}. {question.Text}")</h6>
+
+            @* Şəkil varsa göstər *@
+            @if (!string.IsNullOrEmpty(question.Image))
+            {
+                <div class="question-image-container">
+                    <img src="@Url.Content(question.Image)" alt="Question Image" class="question-image" />
+                </div>
+            }
+
+            @for (int j = 0; j < question.Answers.Count; j++)
+            {
+                var answer = question.Answers[j];
+                var optionLabel = $"{(char)('A' + j)})";
+                var inputId = $"q_{i}_a_{j}";
+
+                <div class="answer-option">
+                    <input type="radio"
+                           name="Answers[@i].SelectedAnswerId"
+                           value="@answer.AnswerId"
+                           id="@inputId" />
+                    <label for="@inputId">@optionLabel @answer.Text</label>
+                </div>
+            }
+
+            <input type="hidden" name="Answers[@i].QuestionId" value="@question.QuestionId" />
+        </div>
+    }
+
+    <button type="submit" class="btn btn-success" id="submitButton">İmtahanı Bitir</button>
+</form>
+
+<script>
+    var totalTime = @Model.DurationInMinutes * 60;
+    var timerDisplay = document.getElementById("timer");
+    var submitButton = document.getElementById("submitButton");
+
+    function updateTimer() {
+        var minutes = Math.floor(totalTime / 60);
+        var seconds = totalTime % 60;
+
+        timerDisplay.innerHTML = "<p>Qalan vaxt: " + minutes.toString().padStart(2, '0') + ":" + seconds.toString().padStart(2, '0') + "</p>";
+
+        if (totalTime <= 0) {
+            submitButton.disabled = true;
+            submitButton.textContent = "Vaxt Bitdi!";
+            submitButton.classList.add("btn-disabled");
+            document.getElementById("quizForm").submit();
+        } else {
+            totalTime--;
+            setTimeout(updateTimer, 1000);
+        }
+    }
+
+    window.onload = function () {
+        updateTimer();
+    };
+</script>

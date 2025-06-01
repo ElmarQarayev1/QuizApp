@@ -1,0 +1,60 @@
+﻿@model QuizResultViewModel
+
+<style>
+    body {
+        background-color: #f0f8ff;
+        font-family: Arial, sans-serif;
+    }
+
+    h2 {
+        color: #1E88E5;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .result-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 50%;
+        margin: auto;
+    }
+
+    p {
+        font-size: 18px;
+        font-weight: bold;
+        color: #1565C0;
+        margin: 10px 0;
+    }
+
+    .btn-primary {
+        background-color: #1E88E5;
+        border-color: #1E88E5;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 5px;
+        display: inline-block;
+        text-decoration: none;
+        margin-top: 20px;
+    }
+
+        .btn-primary:hover {
+            background-color: #1565C0;
+        }
+</style>
+
+<div class="result-container">
+    <h2>İmtahan Nəticəsi</h2>
+    <p><strong>İmtahan Verən:</strong> @Model.UserName</p>
+    <p><strong>Düzgün Cavablar:</strong> @Model.CorrectAnswers</p>
+    <p><strong>Səhv Cavablar:</strong> @Model.WrongAnswers</p>
+    <p><strong>Ümumi Suallar:</strong> @Model.TotalQuestions</p>
+
+    <a asp-action="ReviewWrongQuestions" asp-route-id="@Model.QuizId" class="btn-primary"> Cavabları Nəzərdən Keçir</a>
+
+    <a asp-action="Index" class="btn-primary">Ana Səhifəyə Qayıt</a>
+</div>

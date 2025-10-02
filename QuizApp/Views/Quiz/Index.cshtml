@@ -1,88 +1,215 @@
 ﻿@model List<Quiz>
 
 <style>
-    body {
-        background-color: #f0f8ff;
-        font-family: Arial, sans-serif;
-    }
-
-    h2 {
-        color: #1E88E5;
+    .page-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 2.5rem;
+        font-weight: 800;
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 40px;
     }
 
-    .table {
-        width: 80%;
-        margin: auto;
-        background-color: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-collapse: collapse;
+    .quiz-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .quiz-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
         overflow: hidden;
     }
 
-        .table th, .table td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: center;
-            font-size: 18px;
-        }
-
-        .table th {
-            background-color: #1E88E5;
-            color: white;
-        }
-
-        .table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-    .btn-primary {
-        background-color: #1E88E5;
-        border-color: #1E88E5;
-        color: white;
-        padding: 8px 15px;
-        font-size: 16px;
-        font-weight: bold;
-        border-radius: 5px;
-        text-decoration: none;
+    .quiz-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
     }
 
-        .btn-primary:hover {
-            background-color: #1565C0;
+    .quiz-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .quiz-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+    }
+
+    .quiz-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .quiz-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 20px;
+    }
+
+    .quiz-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .btn-quiz {
+        flex: 1;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        text-decoration: none;
+        min-width: 120px;
+    }
+
+    .btn-start {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-start:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .btn-edit {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+    }
+
+    .btn-edit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+        color: white;
+    }
+
+    .btn-delete {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        color: white;
+        border: none;
+        box-shadow: 0 4px 15px rgba(250, 112, 154, 0.3);
+    }
+
+    .btn-delete:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(250, 112, 154, 0.4);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .empty-icon {
+        font-size: 5rem;
+        margin-bottom: 20px;
+        opacity: 0.5;
+    }
+
+    .empty-title {
+        font-size: 1.8rem;
+        color: #2d3748;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .empty-text {
+        color: #718096;
+        font-size: 1.1rem;
+    }
+
+    @@media (max-width: 768px) {
+        .quiz-grid {
+            grid-template-columns: 1fr;
         }
+
+        .quiz-actions {
+            flex-direction: column;
+        }
+
+        .btn-quiz {
+            width: 100%;
+        }
+    }
 </style>
 
+<h2 class="page-header">İmtahanlar</h2>
 
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Başlıq</th>
-            <th>Əməliyyat</th>
-        </tr>
-    </thead>
-    <tbody>
+@if (Model != null && Model.Any())
+{
+    <div class="quiz-grid">
         @foreach (var quiz in Model)
         {
-            <tr>
-                <td>@quiz.Title</td>
-                <td>
+            <div class="quiz-card">
+                <div class="quiz-icon">📝</div>
+                <h3 class="quiz-title">@quiz.Title</h3>
+
+                <div class="quiz-actions">
+                    <a asp-action="TakeQuiz" asp-route-id="@quiz.Id" class="btn-quiz btn-start">
+                        ▶️ Başla
+                    </a>
+
                     @if (User.IsInRole("superadmin"))
                     {
-                        <a href="@Url.Action("Edit", "Quiz", new { id = quiz.Id })" class="btn btn-warning">Redaktə et</a>
-                        <form asp-action="DeleteConfirmed" method="post" class="d-inline" onsubmit="return confirm('Bu quizi silmək istədiyinizə əminsinizmi?');">
+                        <a href="@Url.Action("Edit", "Quiz", new { id = quiz.Id })" class="btn-quiz btn-edit">
+                            ✏️ Redaktə
+                        </a>
+                        <form asp-action="DeleteConfirmed" method="post" style="flex: 1; margin: 0;"
+                              onsubmit="return confirm('Bu imtahanı silmək istədiyinizdən əminsiniz?');">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="id" value="@quiz.Id" />
-                            <button type="submit" class="btn btn-danger btn-sm">Sil</button>
+                            <button type="submit" class="btn-quiz btn-delete" style="width: 100%;">
+                                🗑️ Sil
+                            </button>
                         </form>
-
                     }
-
-                    <a asp-action="TakeQuiz" asp-route-id="@quiz.Id" class="btn btn-primary">İmtahana Başla</a>
-                </td>
-            </tr>
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+}
+else
+{
+    <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h3 class="empty-title">Heç bir imtahan tapılmadı</h3>
+        <p class="empty-text">Hal-hazırda mövcud imtahan yoxdur</p>
+    </div>
+}

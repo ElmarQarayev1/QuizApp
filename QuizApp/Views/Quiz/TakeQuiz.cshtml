@@ -1,147 +1,296 @@
-﻿@model QuizApp.Models.ViewModels.QuizViewModel
+﻿
+@model QuizApp.Models.ViewModels.QuizViewModel
 
 <style>
     body {
-        background-color: #f0f8ff;
-        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    h2 {
-        color: #1E88E5;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    #timer {
-        background-color: white;
-        color: black;
-        text-align: center;
-        padding: 10px;
-        font-size: 20px;
-        font-weight: bold;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-    }
-
-    form {
-        background-color: white;
+    .quiz-container {
+        max-width: 900px;
+        margin: 0 auto;
         padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    .question-block {
-        background-color: #f2f2f2;
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 20px;
+    .quiz-header {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
 
-    h6.small-question-title {
-        font-size: 18px;
-        font-weight: normal;
-        color: black;
-        margin-bottom: 10px;
+    .quiz-title {
+        color: #667eea;
+        font-size: 32px;
+        font-weight: 700;
+        margin: 0 0 15px 0;
+        text-align: center;
     }
 
-    .answer-option {
-        margin-left: 20px;
-        margin-bottom: 8px;
-    }
-
-        .answer-option label {
-            font-weight: normal;
-            color: black;
-        }
-
-    .btn-success {
-        background-color: #1E88E5;
-        border-color: #1E88E5;
+    .timer-container {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         color: white;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
     }
 
-        .btn-success:hover {
-            background-color: #1565C0;
-        }
+    .timer-label {
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+        opacity: 0.9;
+    }
 
-    .btn-disabled {
-        background-color: gray !important;
-        border-color: gray !important;
-        color: white !important;
+    .timer-display {
+        font-size: 36px;
+        font-weight: 700;
+        font-family: 'Courier New', monospace;
+    }
+
+    .question-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .question-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .question-number {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 35px;
+        font-weight: 700;
+        margin-right: 10px;
+    }
+
+    .question-text {
+        font-size: 20px;
+        color: #333;
+        font-weight: 600;
+        margin-bottom: 20px;
+        line-height: 1.6;
     }
 
     .question-image-container {
         text-align: center;
-        margin-top: 10px;
+        margin: 20px 0;
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 10px;
     }
 
     .question-image {
         max-width: 100%;
-        max-height: 200px;
-        border-radius: 8px;
+        max-height: 300px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .answers-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .answer-option {
+        position: relative;
+        margin: 0;
+    }
+
+    .answer-option input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .answer-label {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        background: #f8f9fa;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 16px;
+        color: #495057;
+    }
+
+    .answer-option input[type="radio"]:checked + .answer-label {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: #667eea;
+        color: white;
+        transform: scale(1.02);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .answer-label:hover {
+        border-color: #667eea;
+        background: #f0f2ff;
+    }
+
+    .answer-option input[type="radio"]:checked + .answer-label:hover {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .option-letter {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        background: white;
+        color: #667eea;
+        border-radius: 50%;
+        font-weight: 700;
+        margin-right: 12px;
+        flex-shrink: 0;
+    }
+
+    .answer-option input[type="radio"]:checked + .answer-label .option-letter {
+        background: white;
+        color: #667eea;
+    }
+
+    .submit-container {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        border: none;
+        color: white;
+        padding: 15px 50px;
+        font-size: 18px;
+        font-weight: 700;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px rgba(56, 239, 125, 0.4);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(56, 239, 125, 0.5);
+    }
+
+    .btn-submit:disabled {
+        background: #6c757d;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .timer-warning {
+        animation: pulse 1s infinite;
+    }
+
+    @@keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
     }
 </style>
 
-<h2>@Model.Title</h2>
-
-<div id="timer"></div>
-
-<form asp-action="CalculateResult" method="post" id="quizForm">
-    <input type="hidden" name="QuizId" value="@Model.QuizId" />
-
-    @for (int i = 0; i < Model.Questions.Count; i++)
-    {
-        var question = Model.Questions[i];
-
-        <div class="question-block">
-            <h6 class="small-question-title">@($"{i + 1}. {question.Text}")</h6>
-
-            @* Şəkil varsa göstər *@
-            @if (!string.IsNullOrEmpty(question.Image))
-            {
-                <div class="question-image-container">
-                    <img src="@Url.Content(question.Image)" alt="Question Image" class="question-image" />
-                </div>
-            }
-
-            @for (int j = 0; j < question.Answers.Count; j++)
-            {
-                var answer = question.Answers[j];
-                var optionLabel = $"{(char)('A' + j)})";
-                var inputId = $"q_{i}_a_{j}";
-
-                <div class="answer-option">
-                    <input type="radio"
-                           name="Answers[@i].SelectedAnswerId"
-                           value="@answer.AnswerId"
-                           id="@inputId" />
-                    <label for="@inputId">@optionLabel @answer.Text</label>
-                </div>
-            }
-
-            <input type="hidden" name="Answers[@i].QuestionId" value="@question.QuestionId" />
+<div class="quiz-container">
+    <div class="quiz-header">
+        <h2 class="quiz-title">📝 @Model.Title</h2>
+        <div class="timer-container" id="timerContainer">
+            <div class="timer-label">Qalan Vaxt</div>
+            <div class="timer-display" id="timer">00:00</div>
         </div>
-    }
+    </div>
 
-    <button type="submit" class="btn btn-success" id="submitButton">İmtahanı Bitir</button>
-</form>
+    <form asp-action="CalculateResult" method="post" id="quizForm">
+        <input type="hidden" name="QuizId" value="@Model.QuizId" />
+
+        @for (int i = 0; i < Model.Questions.Count; i++)
+        {
+            var question = Model.Questions[i];
+
+            <div class="question-card">
+                <div class="question-text">
+                    <span class="question-number">@(i + 1)</span>
+                    @question.Text
+                </div>
+
+                @if (!string.IsNullOrEmpty(question.Image))
+                {
+                    <div class="question-image-container">
+                        <img src="@Url.Content(question.Image)" alt="Sual şəkili" class="question-image" />
+                    </div>
+                }
+
+                <div class="answers-container">
+                    @for (int j = 0; j < question.Answers.Count; j++)
+                    {
+                        var answer = question.Answers[j];
+                        var optionLabel = $"{(char)('A' + j)}";
+                        var inputId = $"q_{i}_a_{j}";
+
+                        <div class="answer-option">
+                            <input type="radio"
+                                   name="Answers[@i].SelectedAnswerId"
+                                   value="@answer.AnswerId"
+                                   id="@inputId" />
+                            <label for="@inputId" class="answer-label">
+                                <span class="option-letter">@optionLabel</span>
+                                <span>@answer.Text</span>
+                            </label>
+                        </div>
+                    }
+                </div>
+
+                <input type="hidden" name="Answers[@i].QuestionId" value="@question.QuestionId" />
+            </div>
+        }
+
+        <div class="submit-container">
+            <button type="submit" class="btn-submit" id="submitButton">
+                ✓ İmtahanı Bitir
+            </button>
+        </div>
+    </form>
+</div>
 
 <script>
     var totalTime = @Model.DurationInMinutes * 60;
     var timerDisplay = document.getElementById("timer");
+    var timerContainer = document.getElementById("timerContainer");
     var submitButton = document.getElementById("submitButton");
 
     function updateTimer() {
         var minutes = Math.floor(totalTime / 60);
         var seconds = totalTime % 60;
 
-        timerDisplay.innerHTML = "<p>Qalan vaxt: " + minutes.toString().padStart(2, '0') + ":" + seconds.toString().padStart(2, '0') + "</p>";
+        timerDisplay.textContent = minutes.toString().padStart(2, '0') + ":" + seconds.toString().padStart(2, '0');
+
+        if (totalTime <= 60) {
+            timerContainer.classList.add('timer-warning');
+        }
 
         if (totalTime <= 0) {
             submitButton.disabled = true;
-            submitButton.textContent = "Vaxt Bitdi!";
-            submitButton.classList.add("btn-disabled");
+            submitButton.textContent = "⏱ Vaxt Bitdi!";
             document.getElementById("quizForm").submit();
         } else {
             totalTime--;

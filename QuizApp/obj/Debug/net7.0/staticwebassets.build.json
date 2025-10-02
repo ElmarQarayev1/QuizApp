@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "f1VFwsYtqJQF2vz78wHkezPiTiTLKK1jJL+MDCkNTxU=",
+  "Hash": "M6VsCYh+VYrlAsFnUQ1stGOgKsZ5ZTmI05vjMXwpVvo=",
   "Source": "QuizApp",
   "BasePath": "_content/QuizApp",
   "Mode": "Default",
@@ -102,12 +102,12 @@
       "OriginalItemSpec": "wwwroot/favicon.ico"
     },
     {
-      "Identity": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/img/asanx.jpeg",
+      "Identity": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/img/.DS_Store",
       "SourceId": "QuizApp",
       "SourceType": "Discovered",
       "ContentRoot": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/",
       "BasePath": "_content/QuizApp",
-      "RelativePath": "img/asanx.jpeg",
+      "RelativePath": "img/.DS_Store",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -116,7 +116,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/img/asanx.jpeg"
+      "OriginalItemSpec": "wwwroot/img/.DS_Store"
     },
     {
       "Identity": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/img/fc.png",
@@ -187,57 +187,6 @@
       "OriginalItemSpec": "wwwroot/img/sabah.png"
     },
     {
-      "Identity": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/img/testimonial-1.jpg",
-      "SourceId": "QuizApp",
-      "SourceType": "Discovered",
-      "ContentRoot": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/",
-      "BasePath": "_content/QuizApp",
-      "RelativePath": "img/testimonial-1.jpg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/img/testimonial-1.jpg"
-    },
-    {
-      "Identity": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/img/testimonial-2.jpg",
-      "SourceId": "QuizApp",
-      "SourceType": "Discovered",
-      "ContentRoot": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/",
-      "BasePath": "_content/QuizApp",
-      "RelativePath": "img/testimonial-2.jpg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/img/testimonial-2.jpg"
-    },
-    {
-      "Identity": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/img/user.jpg",
-      "SourceId": "QuizApp",
-      "SourceType": "Discovered",
-      "ContentRoot": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/",
-      "BasePath": "_content/QuizApp",
-      "RelativePath": "img/user.jpg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/img/user.jpg"
-    },
-    {
       "Identity": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/js/main.js",
       "SourceId": "QuizApp",
       "SourceType": "Discovered",
@@ -304,6 +253,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/lib/easing/easing.min.js"
+    },
+    {
+      "Identity": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/lib/owlcarousel/.DS_Store",
+      "SourceId": "QuizApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/",
+      "BasePath": "_content/QuizApp",
+      "RelativePath": "lib/owlcarousel/.DS_Store",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/lib/owlcarousel/.DS_Store"
     },
     {
       "Identity": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/lib/owlcarousel/assets/ajax-loader.gif",
@@ -457,23 +423,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/lib/owlcarousel/LICENSE"
-    },
-    {
-      "Identity": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/lib/owlcarousel/owl.carousel.js",
-      "SourceId": "QuizApp",
-      "SourceType": "Discovered",
-      "ContentRoot": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/",
-      "BasePath": "_content/QuizApp",
-      "RelativePath": "lib/owlcarousel/owl.carousel.js",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/lib/owlcarousel/owl.carousel.js"
     },
     {
       "Identity": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/lib/owlcarousel/owl.carousel.min.js",

@@ -1,61 +1,345 @@
 ﻿@model QuizApp.Models.ViewModels.CatalogCreateViewModel
-
 @{
     ViewData["Title"] = "Yeni Kataloq Yarat";
 }
+
 <style>
     body {
-        background-color: #ffffff;
-        font-family: 'Arial', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
     }
 
-    .container {
+    .create-container {
+        width: 100%;
         max-width: 600px;
-        background-color: #f8f9fa;
-        padding: 30px;
-        border-radius: 8px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    h2 {
-        color: #007bff;
+    .create-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 30px;
+        padding: 50px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+        animation: slideUp 0.5s ease-out;
+    }
+
+    @@keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .create-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .create-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .create-icon {
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 3rem;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        animation: bounce 2s ease-in-out infinite;
+    }
+
+    @@keyframes bounce {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-15px); }
+    }
+
+    .create-title {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0 0 10px 0;
+    }
+
+    .create-subtitle {
+        color: #718096;
+        font-size: 1rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
     .form-control {
-        border-radius: 5px;
+        border: 2px solid #e2e8f0;
+        border-radius: 15px;
+        padding: 15px 20px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        background: #f7fafc;
     }
 
-    .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        background: white;
+        outline: none;
+        transform: scale(1.01);
     }
 
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #004085;
+    .text-danger {
+        color: #f56565;
+        font-size: 0.9rem;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .btn-create {
+        flex: 1;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 15px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-create::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-create:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .btn-create:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+        color: white;
+    }
+
+    .btn-create:active {
+        transform: translateY(-1px);
+    }
+
+    .btn-cancel {
+        flex: 1;
+        background: white;
+        color: #718096;
+        border: 2px solid #e2e8f0;
+        padding: 15px 30px;
+        border-radius: 15px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-cancel:hover {
+        background: #f7fafc;
+        border-color: #cbd5e0;
+        color: #4a5568;
+        transform: translateY(-2px);
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.2rem;
+        pointer-events: none;
+        opacity: 0.6;
+    }
+
+    .input-wrapper .form-control {
+        padding-left: 55px;
+    }
+
+    .tips-box {
+        background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 25px;
+        border-left: 4px solid #667eea;
+    }
+
+    .tips-title {
+        font-weight: 600;
+        color: #667eea;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .tips-text {
+        color: #4a5568;
+        font-size: 0.95rem;
+        margin: 0;
+    }
+
+    @@media (max-width: 768px) {
+        .create-card {
+            padding: 30px 20px;
         }
 
-    .form-group label {
-        font-weight: bold;
-        color: #333;
+        .button-group {
+            flex-direction: column;
+        }
+
+        .create-title {
+            font-size: 1.5rem;
+        }
     }
 </style>
 
-<div class="container mt-5">
-    <h2 class="text-center mb-4 text-primary" style="color:blue;">Yeni Kataloq Yarat</h2>
-    <form asp-action="Create" method="post">
-        <div class="form-group">
-            <label asp-for="Title" class="form-label">Kataloq Başlığı</label>
-            <input asp-for="Title" class="form-control form-control-lg" placeholder="Kataloq başlığını daxil edin" />
-            <span asp-validation-for="Title" class="text-danger"></span>
+<div class="create-container">
+    <div class="create-card">
+        <div class="create-header">
+            <div class="create-icon">
+                ✨
+            </div>
+            <h1 class="create-title">Yeni Kataloq Yarat</h1>
+            <p class="create-subtitle">Suallarınız üçün yeni bir kateqoriya əlavə edin</p>
         </div>
 
-        <div class="text-center mt-4">
-            <button type="submit" class="btn btn-primary btn-lg">Yarat</button>
-        </div>
-    </form>
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group mb-4">
+                <label asp-for="Title" class="form-label">
+                    📚 Kataloq Adı
+                </label>
+                <div class="input-wrapper">
+                    <span class="input-icon">📝</span>
+                    <input asp-for="Title" class="form-control"
+                           placeholder="Məsələn: Riyaziyyat, Tarix, Biologiya..."
+                           autofocus />
+                </div>
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="tips-box">
+                <div class="tips-title">
+                    💡 Məsləhət
+                </div>
+                <p class="tips-text">
+                    Kataloq adını aydın və anlaşılan seçin. Bu, suallarınızı daha asan idarə etməyə kömək edəcək.
+                </p>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn-create">
+                    🚀 Kataloq Yarat
+                </button>
+                <a asp-action="Index" class="btn-cancel">
+                    ↩️ Ləğv Et
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
 
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 
+    <script>// Form submit animasiyası
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const btn = this.querySelector('.btn-create');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '⏳ Yaradılır...';
+            btn.disabled = true;
+        });
 
+        // Input animasiyası
+        const input = document.querySelector('.form-control');
 
+        input.addEventListener('input', function() {
+            if (this.value.length > 0) {
+                this.style.borderColor = '#667eea';
+            } else {
+                this.style.borderColor = '#e2e8f0';
+            }
+        });
+
+        // Karakter sayğacı
+        input.addEventListener('input', function() {
+            const maxLength = 200;
+            const currentLength = this.value.length;
+
+            if (!document.querySelector('.char-counter')) {
+                const counter = document.createElement('small');
+                counter.className = 'char-counter';
+                counter.style.cssText = 'display: block; text-align: right; color: #718096; margin-top: 5px;';
+                this.parentElement.parentElement.appendChild(counter);
+            }
+
+            const counter = document.querySelector('.char-counter');
+            counter.textContent = `${currentLength}/${maxLength} simvol`;
+
+            if (currentLength > maxLength * 0.9) {
+                counter.style.color = '#f56565';
+            } else {
+                counter.style.color = '#718096';
+            }
+        });</script>
+}

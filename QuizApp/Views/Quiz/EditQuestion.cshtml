@@ -1,0 +1,468 @@
+﻿
+@model QuizApp.Models.ViewModels.QuestionEditViewModel
+
+@{
+    ViewData["Title"] = "Sualı Redaktə Et";
+}
+
+<style>
+    .edit-question-page {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .edit-question-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        text-align: center;
+    }
+
+    .page-title {
+        color: #667eea;
+        font-size: 32px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 15px;
+        padding: 35px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .form-section {
+        margin-bottom: 30px;
+    }
+
+    .section-label {
+        display: block;
+        color: #495057;
+        font-weight: 600;
+        margin-bottom: 12px;
+        font-size: 16px;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+    .image-preview-section {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        position: relative;
+    }
+
+    .preview-image {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .delete-image-btn {
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .delete-image-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+
+    .no-image-text {
+        color: #6c757d;
+        font-style: italic;
+    }
+
+    .answers-section {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 25px;
+        margin-top: 30px;
+    }
+
+    .answers-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .answers-title {
+        color: #495057;
+        font-size: 20px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .answer-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 15px;
+        border: 2px solid #e9ecef;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+        .answer-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+    .answer-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .answer-label-text {
+        color: #667eea;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .delete-answer-btn {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .delete-answer-btn:hover {
+            background: #c82333;
+            transform: scale(1.05);
+        }
+
+    .answer-input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+        margin-bottom: 12px;
+    }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+    .correct-answer-check {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        background: #e7f3ff;
+        border-radius: 8px;
+    }
+
+        .correct-answer-check input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .correct-answer-check label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 600;
+            color: #0066cc;
+        }
+
+    .add-answer-btn {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        border: none;
+        color: white;
+        padding: 12px 25px;
+        font-size: 16px;
+        font-weight: 700;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+        .add-answer-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(56, 239, 125, 0.4);
+        }
+
+    .form-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .btn-back {
+        flex: 1;
+        background: #6c757d;
+        border: none;
+        color: white;
+        padding: 15px;
+        font-size: 16px;
+        font-weight: 700;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+
+        .btn-back:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+    .btn-save {
+        flex: 2;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: white;
+        padding: 15px;
+        font-size: 16px;
+        font-weight: 700;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+    .text-danger {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 5px;
+        display: block;
+    }
+</style>
+
+<div class="edit-question-page">
+    <div class="edit-question-container">
+        <div class="page-header">
+            <h2 class="page-title">✏️ Sualı Redaktə Et</h2>
+        </div>
+
+        <div class="form-card">
+            <form asp-action="EditQuestions" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="ImageUrl" />
+
+                <div class="form-section">
+                    <label class="section-label">📝 Sual Mətni</label>
+                    <input type="text" asp-for="Text" class="form-input" placeholder="Sualı daxil edin..." />
+                    <span asp-validation-for="Text" class="text-danger"></span>
+                </div>
+
+                <div class="form-section">
+                    <label class="section-label">📚 Kataloq</label>
+                    <select asp-for="CatalogId" class="form-input">
+                        @foreach (var catalog in ViewBag.Catalogs)
+                        {
+                            <option value="@catalog.Id">@catalog.Title</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-section">
+                    <label class="section-label">🖼️ Şəkil</label>
+                    <div id="currentImageSection">
+                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <div class="image-preview-section">
+                                <img src="@Model.ImageUrl" alt="Sual Şəkili" class="preview-image" id="currentImage" />
+                                <button type="button" class="delete-image-btn" onclick="deleteImage()" id="deleteImageBtn">
+                                    🗑️ Şəkli Sil
+                                </button>
+                            </div>
+                            <input type="hidden" name="DeleteImage" value="false" id="deleteImageFlag" />
+                        }
+                        else
+                        {
+                            <p class="no-image-text" id="noImageText">Şəkil mövcud deyil</p>
+                        }
+                    </div>
+                </div>
+
+                <div class="form-section" id="uploadImageSection">
+                    <label class="section-label">📤 Yeni Şəkil Yüklə (istəyə bağlı)</label>
+                    <input type="file" asp-for="ImageFile" class="form-input" />
+                </div>
+
+                <div class="answers-section">
+                    <div class="answers-header">
+                        <h5 class="answers-title">💡 Cavablar</h5>
+                    </div>
+                    <div id="answers">
+                        @for (int i = 0; i < Model.Answers.Count; i++)
+                        {
+                            <div class="answer-card">
+                                <input type="hidden" name="Answers[@i].Id" value="@Model.Answers[i].Id" />
+
+                                <div class="answer-header">
+                                    <span class="answer-label-text">Cavab @(i + 1)</span>
+                                    @if (Model.Answers.Count > 1)
+                                    {
+                                        <button type="button" class="delete-answer-btn" onclick="deleteAnswer(this)">
+                                            🗑️ Sil
+                                        </button>
+                                    }
+                                </div>
+
+                                <input type="text" name="Answers[@i].Text" value="@Model.Answers[i].Text"
+                                       class="answer-input" placeholder="Cavab mətni..." />
+
+                                <div class="correct-answer-check">
+                                    <input type="checkbox" name="Answers[@i].IsCorrect" value="true"
+                                           @(Model.Answers[i].IsCorrect ? "checked" : "") id="correct_@i" />
+                                    <label for="correct_@i">✓ Doğru Cavab</label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <button type="button" class="add-answer-btn" onclick="addAnswer()">
+                        + Yeni Cavab Əlavə Et
+                    </button>
+                </div>
+
+                <div class="form-actions">
+                    <a asp-controller="Catalog" asp-action="Details" asp-route-id="@Model.CatalogId" class="btn-back">
+                        ← Geri
+                    </a>
+                    <button type="submit" class="btn-save">
+                        💾 Yadda Saxla
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        let answerCount = @Model.Answers.Count;
+
+        function deleteImage() {
+            if (confirm('Şəkli silmək istədiyinizdən əminsiniz?')) {
+                document.getElementById('currentImage').style.display = 'none';
+                document.getElementById('deleteImageBtn').style.display = 'none';
+                document.getElementById('deleteImageFlag').value = 'true';
+
+                let imageSection = document.getElementById('currentImageSection');
+                let noImageText = document.createElement('p');
+                noImageText.className = 'no-image-text';
+                noImageText.id = 'noImageText';
+                noImageText.textContent = '🗑️ Şəkil silinəcək (formu saxladıqdan sonra)';
+                imageSection.appendChild(noImageText);
+            }
+        }
+
+        function addAnswer() {
+            let html = `
+                <div class="answer-card">
+                    <input type="hidden" name="Answers[${answerCount}].Id" value="0" />
+
+                    <div class="answer-header">
+                        <span class="answer-label-text">Cavab ${answerCount + 1}</span>
+                        <button type="button" class="delete-answer-btn" onclick="deleteAnswer(this)">
+                            🗑️ Sil
+                        </button>
+                    </div>
+
+                    <input type="text" name="Answers[${answerCount}].Text"
+                           class="answer-input" placeholder="Cavab mətni..." />
+
+                    <div class="correct-answer-check">
+                        <input type="checkbox" name="Answers[${answerCount}].IsCorrect" value="true" id="correct_${answerCount}" />
+                        <label for="correct_${answerCount}">✓ Doğru Cavab</label>
+                    </div>
+                </div>
+            `;
+            document.getElementById("answers").insertAdjacentHTML("beforeend", html);
+            answerCount++;
+            updateAnswerIndexes();
+        }
+
+        function deleteAnswer(button) {
+            let answerItems = document.querySelectorAll(".answer-card");
+            if (answerItems.length > 1) {
+                button.closest(".answer-card").remove();
+                updateAnswerIndexes();
+            } else {
+                alert("❌ Ən azı bir cavab olmalıdır!");
+            }
+        }
+
+        function updateAnswerIndexes() {
+            let answerItems = document.querySelectorAll(".answer-card");
+            answerItems.forEach((item, i) => {
+                item.querySelector(".answer-label-text").textContent = `Cavab ${i + 1}`;
+
+                let hiddenId = item.querySelector("input[type='hidden']");
+                let textInput = item.querySelector("input[type='text']");
+                let checkboxInput = item.querySelector("input[type='checkbox']");
+
+                if (hiddenId) hiddenId.setAttribute("name", `Answers[${i}].Id`);
+                if (textInput) textInput.setAttribute("name", `Answers[${i}].Text`);
+                if (checkboxInput) {
+                    checkboxInput.setAttribute("name", `Answers[${i}].IsCorrect`);
+                    checkboxInput.id = `correct_${i}`;
+                    item.querySelector("label").setAttribute("for", `correct_${i}`);
+                }
+            });
+            answerCount = answerItems.length;
+        }
+    </script>
+}
+

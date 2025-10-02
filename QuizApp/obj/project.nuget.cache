@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "kP/BMpQDO0ETI6cuhQ08xCotrVYWuSbFPBGUMMOc6R+lNvquSAAYn0L2lGWFgaOFiwWti+cKwtlBPzs0G5vQ5Q==",
+  "dgSpecHash": "YWNZ9eNTpeCTRA+t3pP5aQh2kw8PhMYsHYQUieaINvDz2GkvaAwFlqKEfvtY/BoY9ddXjHRm2igtxC2RY0i9gQ==",
   "success": true,
-  "projectFilePath": "/Users/elmar/Desktop/QuizApp1/QuizApp/QuizApp.csproj",
+  "projectFilePath": "/Users/elmar/Desktop/QuizApp/QuizApp/QuizApp.csproj",
   "expectedPackageFiles": [
     "/Users/elmar/.nuget/packages/azure.core/1.35.0/azure.core.1.35.0.nupkg.sha512",
     "/Users/elmar/.nuget/packages/azure.identity/1.10.3/azure.identity.1.10.3.nupkg.sha512",

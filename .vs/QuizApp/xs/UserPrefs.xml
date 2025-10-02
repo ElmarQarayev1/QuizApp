@@ -1,0 +1,32 @@
+﻿<Properties StartupConfiguration="{71CEE7B1-33D5-4C8E-816C-3B200F4E079B}|https">
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.QuizApp PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="QuizApp/Properties/launchSettings.json">
+    <Files>
+      <File FileName="QuizApp/appsettings.json" Line="14" Column="1" />
+      <File FileName="QuizApp/Program.cs" Line="79" Column="24" />
+      <File FileName="QuizApp/Controllers/AccountController.cs" Line="142" Column="44" />
+      <File FileName="QuizApp/Controllers/CatalogController.cs" Line="1" Column="1" />
+      <File FileName="QuizApp/Controllers/HomeController.cs" Line="1" Column="1" />
+      <File FileName="QuizApp/Controllers/QuizController.cs" Line="1" Column="1" />
+      <File FileName="QuizApp/Properties/launchSettings.json" Line="22" Column="29" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="QuizApp" expanded="True">
+            <Node name="QuizApp">
+              <Node name="Controllers" expanded="True" />
+              <Node name="Program.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+</Properties>

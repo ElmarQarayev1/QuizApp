@@ -4076,11 +4076,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/elmar/Desktop/QuizApp1/QuizApp/QuizApp.csproj",
+      "projectUniqueName": "/Users/elmar/Desktop/QuizApp/QuizApp/QuizApp.csproj",
       "projectName": "QuizApp",
-      "projectPath": "/Users/elmar/Desktop/QuizApp1/QuizApp/QuizApp.csproj",
+      "projectPath": "/Users/elmar/Desktop/QuizApp/QuizApp/QuizApp.csproj",
       "packagesPath": "/Users/elmar/.nuget/packages/",
-      "outputPath": "/Users/elmar/Desktop/QuizApp1/QuizApp/obj/",
+      "outputPath": "/Users/elmar/Desktop/QuizApp/QuizApp/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/elmar/.nuget/NuGet/NuGet.Config"

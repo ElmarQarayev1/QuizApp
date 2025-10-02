@@ -1,69 +1,110 @@
-﻿@model QuizCreateViewModel
-
+﻿
+@model QuizCreateViewModel
 @{
     ViewData["Title"] = "Quiz Redaktə Et";
 }
 
-<div class="container mt-5">
-    <h2 class="text-center mb-4 text-primary">Quiz Redaktə Et</h2>
-
-    <form method="post">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <div class="form-group">
-                    <label for="Title" class="font-weight-bold">Quiz Başlığı</label>
-                    <input type="text" class="form-control" id="Title" name="Title" value="@Model.Title" required />
-                    <input asp-for="DurationInMinutes" class="form-control" type="number" min="1" max="180" required />
-                    <span asp-validation-for="DurationInMinutes" class="text-danger"></span>
-
-
-                </div>
-
-                <div class="form-group mt-4">
-                    <button type="submit" class="btn btn-success btn-block">Redaktə Et</button>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
 <style>
-    .container {
+    .edit-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 50px 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .edit-card {
         max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     }
 
-    .card {
-        border-radius: 10px;
-    }
-
-    .btn-block {
-        padding: 12px;
-        font-size: 16px;
-    }
-
-    .text-center {
-        font-size: 24px;
-        font-weight: bold;
-    }
-
-    .font-weight-bold {
-        font-weight: 600;
-    }
-
-    .form-control {
-        border-radius: 8px;
-        border: 1px solid #ddd;
-        padding: 12px;
+    .edit-title {
+        color: #667eea;
+        font-size: 32px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 30px;
     }
 
     .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 25px;
     }
 
-    .card-body {
-        padding: 25px;
+    .form-label {
+        display: block;
+        color: #495057;
+        font-weight: 600;
+        margin-bottom: 10px;
+        font-size: 16px;
     }
 
-    .card-shadow-sm {
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    .form-control {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+    .btn-submit-edit {
+        width: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: white;
+        padding: 15px;
+        font-size: 18px;
+        font-weight: 700;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 20px;
+    }
+
+        .btn-submit-edit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+    .text-danger {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 5px;
+        display: block;
     }
 </style>
+
+<div class="edit-container">
+    <div class="edit-card">
+        <h2 class="edit-title">✏️ Quiz Redaktə Et</h2>
+        <form method="post">
+            <div class="form-group">
+                <label for="Title" class="form-label">Quiz Başlığı</label>
+                <input type="text" class="form-control" id="Title" name="Title" value="@Model.Title" required placeholder="Quiz başlığını daxil edin..." />
+            </div>
+
+            <div class="form-group">
+                <label for="DurationInMinutes" class="form-label">Müddət (dəqiqə)</label>
+                <input asp-for="DurationInMinutes" class="form-control" type="number" min="1" max="180" required placeholder="5" />
+                <span asp-validation-for="DurationInMinutes" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn-submit-edit">💾 Dəyişiklikləri Yadda Saxla</button>
+        </form>
+    </div>
+</div>
+
+
+

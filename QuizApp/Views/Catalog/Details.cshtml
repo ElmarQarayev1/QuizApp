@@ -1,44 +1,179 @@
 ﻿@model QuizApp.Models.ViewModels.CatalogDetailsViewModel
-
 @{
     ViewData["Title"] = "Kataloq Detalları";
 }
 
-<div class="container mt-5">
-    <h2 class="text-primary mb-4">Kataloq Detalları: @Model.Catalog.Title</h2>
+<style>
+    .catalog-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
 
-    <div class="card shadow-sm border-0">
-        <div class="card-body">
-            <h5 class="card-title text-primary">Kataloq Haqqında</h5>
-            <a asp-action="Edit" asp-route-id="@Model.Catalog.Id" class="btn btn-outline-primary btn-sm">Redaktə Et</a>
-            <a asp-action="Delete" asp-route-id="@Model.Catalog.Id" class="btn btn-outline-danger btn-sm">Sil</a>
+    .question-card {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-bottom: 20px;
+        transition: transform 0.2s;
+    }
+
+        .question-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+    .question-text {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .question-image {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 8px;
+        margin: 15px 0;
+    }
+
+    .answers-section {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 15px;
+    }
+
+    .answer-item {
+        padding: 8px 12px;
+        margin: 5px 0;
+        border-radius: 5px;
+        background-color: white;
+        border-left: 4px solid #dee2e6;
+    }
+
+        .answer-item.correct {
+            border-left-color: #28a745;
+            background-color: #d4edda;
+        }
+
+    .answer-text {
+        font-size: 15px;
+    }
+
+    .correct-badge {
+        background-color: #28a745;
+        color: white;
+        padding: 3px 10px;
+        border-radius: 12px;
+        font-size: 12px;
+        margin-left: 10px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .btn-edit {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: white;
+    }
+
+        .btn-edit:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+
+    .btn-delete {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: white;
+    }
+
+        .btn-delete:hover {
+            background-color: #c82333;
+            color: white;
+        }
+</style>
+
+<div class="container mt-4">
+    <div class="catalog-header">
+        <h2>📚 @Model.Catalog.Title</h2>
+        <p class="mb-0">Bu kataloqda @(Model.Questions?.Count ?? 0) sual mövcuddur</p>
+        <div class="mt-3">
+            <a asp-action="Edit" asp-route-id="@Model.Catalog.Id" class="btn btn-light btn-sm">
+                Kataloqu Redaktə Et
+            </a>
+            <a asp-action="Index" class="btn btn-outline-light btn-sm">
+                Geri
+            </a>
         </div>
     </div>
 
-    <h3 class="mt-5">Bu Kataloqa Aid Suallar</h3>
-
     @if (Model.Questions != null && Model.Questions.Any())
     {
-        <ul class="list-group">
-            @foreach (var question in Model.Questions)
-            {
-                <li class="list-group-item">
-                    <strong>@question.Text</strong>
+        <h3 class="mb-4">Suallar</h3>
 
-                    @if (!string.IsNullOrEmpty(question.ImageUrl))
-                    {
-                        <div class="mt-2">
-                            <img src="@question.ImageUrl" alt="Sual Şəkili" class="img-fluid rounded" style="max-width: 300px;" />
-                        </div>
-                    }
-                </li>
-            }
-        </ul>
+        @foreach (var question in Model.Questions)
+        {
+            <div class="question-card">
+                <div class="question-text">
+                    ❓ @question.Text
+                </div>
+
+                @if (!string.IsNullOrEmpty(question.ImageUrl))
+                {
+                    <div>
+                        <img src="@question.ImageUrl" alt="Sual Şəkili" class="question-image" />
+                    </div>
+                }
+
+                @if (question.Answers != null && question.Answers.Any())
+                {
+                    <div class="answers-section">
+                        <strong>Cavablar:</strong>
+                        @foreach (var answer in question.Answers)
+                        {
+                            <div class="answer-item @(answer.IsCorrect ? "correct" : "")">
+                                <span class="answer-text">@answer.Text</span>
+                                @if (answer.IsCorrect)
+                                {
+                                    <span class="correct-badge">✓ Doğru</span>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+
+                <div class="action-buttons">
+                    <a asp-controller="Quiz" asp-action="EditQuestion" asp-route-id="@question.Id"
+                       class="btn btn-edit btn-sm">
+                        ✏️ Redaktə Et
+                    </a>
+                    <form asp-controller="Quiz" asp-action="DeleteQuestion" asp-route-id="@question.Id"
+                          method="post" style="display: inline;">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-delete btn-sm">
+                            🗑️ Sil
+                        </button>
+                    </form>
+                </div>
+            </div>
+        }
     }
     else
     {
         <div class="alert alert-info">
-            Bu kataloqda heç bir sual mövcud deyil.
+            <strong>ℹ️ Məlumat:</strong> Bu kataloqda heç bir sual mövcud deyil.
+            <a asp-controller="Quiz" asp-action="CreateQuestions" class="alert-link">
+                İlk sualı əlavə edin
+            </a>
         </div>
     }
 </div>

@@ -1,27 +1,162 @@
-﻿@model QuizReviewViewModel
+﻿
+@model QuizReviewViewModel
 
-<div class="container">
-    @*<h2 style="text-align:center; color:cadetblue;">Quiz Nəticəsi</h2>*@
-
-    <h3 style="color: green;">Düzgün Cavablar</h3>
-    @foreach (var q in Model.CorrectQuestions)
-    {
-        <div style="background: #e8f5e9; padding: 20px; margin: 10px; border-radius: 10px;">
-            <h4 style="color: black;">@q.QuestionText</h4>
-            <p><strong>Seçdiyin Cavab:</strong> <span style="color: green;">@q.SelectedAnswer</span></p>
-            <p><strong>Düzgün Cavab:</strong> <span style="color: green;">@q.CorrectAnswer</span></p>
-            <hr />
-        </div>
+<style>
+    .review-page {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    <h3 style="color: red;">Səhv Cavablar</h3>
-    @foreach (var q in Model.WrongQuestions)
-    {
-        <div style="background: #ffebee; padding: 20px; margin: 10px; border-radius: 10px;">
-            <h4 style="color: black;">@q.QuestionText</h4>
-            <p><strong>Seçdiyin Cavab:</strong> <span style="color: red;">@q.SelectedAnswer</span></p>
-            <p><strong>Düzgün Cavab:</strong> <span style="color: red;">@q.CorrectAnswer</span></p>
-            <hr />
-        </div>
+    .review-container {
+        max-width: 900px;
+        margin: 0 auto;
     }
+
+    .review-header {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+        .review-header h2 {
+            color: #667eea;
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+    .section-title {
+        color: white;
+        font-size: 28px;
+        font-weight: 700;
+        margin: 40px 0 20px 0;
+        padding-left: 15px;
+        border-left: 5px solid white;
+    }
+
+    .review-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .review-card.correct {
+            border-left: 5px solid #28a745;
+        }
+
+        .review-card.wrong {
+            border-left: 5px solid #dc3545;
+        }
+
+    .question-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+
+    .answer-row {
+        display: flex;
+        align-items: flex-start;
+        padding: 12px 15px;
+        margin: 10px 0;
+        border-radius: 10px;
+        gap: 12px;
+    }
+
+        .answer-row.selected {
+            background: #f8f9fa;
+        }
+
+        .answer-row.correct-answer {
+            background: #d4edda;
+        }
+
+        .answer-row.wrong-answer {
+            background: #f8d7da;
+        }
+
+    .answer-icon {
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+
+    .answer-label {
+        font-weight: 600;
+        color: #495057;
+        min-width: 120px;
+    }
+
+    .answer-text {
+        color: #333;
+        font-size: 16px;
+        flex: 1;
+    }
+
+    .divider {
+        height: 1px;
+        background: #e9ecef;
+        margin: 20px 0;
+    }
+</style>
+
+<div class="review-page">
+    <div class="review-container">
+        <div class="review-header">
+            <h2>📊 Cavabların Təhlili</h2>
+        </div>
+
+        @if (Model.CorrectQuestions != null && Model.CorrectQuestions.Any())
+        {
+            <h3 class="section-title">✅ Düzgün Cavablar</h3>
+            @foreach (var q in Model.CorrectQuestions)
+            {
+                <div class="review-card correct">
+                    <div class="question-title">@q.QuestionText</div>
+                    <div class="divider"></div>
+                    <div class="answer-row correct-answer">
+                        <span class="answer-icon">✓</span>
+                        <span class="answer-label">Cavabınız:</span>
+                        <span class="answer-text">@q.SelectedAnswer</span>
+                    </div>
+                </div>
+            }
+        }
+
+        @if (Model.WrongQuestions != null && Model.WrongQuestions.Any())
+        {
+            <h3 class="section-title">❌ Səhv Cavablar</h3>
+            @foreach (var q in Model.WrongQuestions)
+            {
+                <div class="review-card wrong">
+                    <div class="question-title">@q.QuestionText</div>
+                    <div class="divider"></div>
+                    <div class="answer-row wrong-answer">
+                        <span class="answer-icon">✗</span>
+                        <span class="answer-label">Cavabınız:</span>
+                        <span class="answer-text">@q.SelectedAnswer</span>
+                    </div>
+                    <div class="answer-row correct-answer">
+                        <span class="answer-icon">✓</span>
+                        <span class="answer-label">Düzgün Cavab:</span>
+                        <span class="answer-text">@q.CorrectAnswer</span>
+                    </div>
+                </div>
+            }
+        }
+    </div>
 </div>

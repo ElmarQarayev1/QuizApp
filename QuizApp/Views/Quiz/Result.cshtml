@@ -1,60 +1,170 @@
-﻿@model QuizResultViewModel
+﻿
+@model QuizResultViewModel
 
 <style>
-    body {
-        background-color: #f0f8ff;
-        font-family: Arial, sans-serif;
-    }
-
-    h2 {
-        color: #1E88E5;
-        text-align: center;
-        margin-bottom: 20px;
+    .result-page {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 50px 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .result-container {
-        background-color: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background: white;
+        border-radius: 20px;
+        padding: 50px;
+        max-width: 700px;
+        width: 100%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         text-align: center;
-        width: 50%;
-        margin: auto;
     }
 
-    p {
-        font-size: 18px;
-        font-weight: bold;
-        color: #1565C0;
-        margin: 10px 0;
+    .result-icon {
+        font-size: 80px;
+        margin-bottom: 20px;
     }
 
-    .btn-primary {
-        background-color: #1E88E5;
-        border-color: #1E88E5;
+    .result-title {
+        color: #667eea;
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 30px;
+    }
+
+    .result-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+        margin: 30px 0;
+    }
+
+    .stat-box {
+        background: #f8f9fa;
+        padding: 25px 20px;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+    .stat-label {
+        font-size: 14px;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+    }
+
+    .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: #495057;
+    }
+
+    .stat-box.correct .stat-value {
+        color: #28a745;
+    }
+
+    .stat-box.wrong .stat-value {
+        color: #dc3545;
+    }
+
+    .stat-box.total .stat-value {
+        color: #667eea;
+    }
+
+    .user-info {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
-        padding: 10px 20px;
-        font-size: 16px;
-        font-weight: bold;
-        border-radius: 5px;
-        display: inline-block;
-        text-decoration: none;
-        margin-top: 20px;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        font-size: 18px;
+        font-weight: 600;
     }
 
-        .btn-primary:hover {
-            background-color: #1565C0;
+    .result-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 40px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .btn-result {
+        padding: 15px 30px;
+        border: none;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-review {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        box-shadow: 0 5px 20px rgba(245, 87, 108, 0.4);
+    }
+
+        .btn-review:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.5);
+            color: white;
+        }
+
+    .btn-home {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        color: white;
+        box-shadow: 0 5px 20px rgba(56, 239, 125, 0.4);
+    }
+
+        .btn-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(56, 239, 125, 0.5);
+            color: white;
         }
 </style>
 
-<div class="result-container">
-    <h2>İmtahan Nəticəsi</h2>
-    <p><strong>İmtahan Verən:</strong> @Model.UserName</p>
-    <p><strong>Düzgün Cavablar:</strong> @Model.CorrectAnswers</p>
-    <p><strong>Səhv Cavablar:</strong> @Model.WrongAnswers</p>
-    <p><strong>Ümumi Suallar:</strong> @Model.TotalQuestions</p>
+<div class="result-page">
+    <div class="result-container">
+        <div class="result-icon">🎯</div>
+        <h2 class="result-title">İmtahan Tamamlandı!</h2>
 
-    <a asp-action="ReviewWrongQuestions" asp-route-id="@Model.QuizId" class="btn-primary"> Cavabları Nəzərdən Keçir</a>
+        <div class="user-info">
+            👤 @Model.UserName
+        </div>
 
-    <a asp-action="Index" class="btn-primary">Ana Səhifəyə Qayıt</a>
+        <div class="result-stats">
+            <div class="stat-box correct">
+                <div class="stat-label">Düzgün</div>
+                <div class="stat-value">@Model.CorrectAnswers</div>
+            </div>
+            <div class="stat-box wrong">
+                <div class="stat-label">Səhv</div>
+                <div class="stat-value">@Model.WrongAnswers</div>
+            </div>
+            <div class="stat-box total">
+                <div class="stat-label">Ümumi</div>
+                <div class="stat-value">@Model.TotalQuestions</div>
+            </div>
+        </div>
+
+        <div class="result-actions">
+            <a asp-action="ReviewWrongQuestions" asp-route-id="@Model.QuizId" class="btn-result btn-review">
+                📋 Cavabları Yoxla
+            </a>
+            <a asp-action="Index" class="btn-result btn-home">
+                🏠 Ana Səhifə
+            </a>
+        </div>
+    </div>
 </div>

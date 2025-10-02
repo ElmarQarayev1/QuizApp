@@ -123,11 +123,11 @@ namespace QuizApp.Controllers
             }
 
           
-            if (await _userManager.IsLockedOutAsync(appUser))
-            {
-                ModelState.AddModelError("", "Your account has been temporarily locked due to multiple failed login attempts. Please try again later.");
-                return View(member);
-            }
+            //if (await _userManager.IsLockedOutAsync(appUser))
+            //{
+            //    ModelState.AddModelError("", "Your account has been temporarily locked due to multiple failed login attempts. Please try again later.");
+            //    return View(member);
+            //}
 
             
             var result = await _signInManager.PasswordSignInAsync(appUser, member.Password, isPersistent: false, lockoutOnFailure: true);
@@ -137,11 +137,11 @@ namespace QuizApp.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            if (result.IsLockedOut)
-            {
-                ModelState.AddModelError("", "Your account has been temporarily locked due to multiple failed login attempts. Please try again later.");
-                return View(member);
-            }
+            //if (result.IsLockedOut)
+            //{
+            //    ModelState.AddModelError("", "Your account has been temporarily locked due to multiple failed login attempts. Please try again later.");
+            //    return View(member);
+            //}
 
             ModelState.AddModelError("", "Email or Password is incorrect");
             return View(member);

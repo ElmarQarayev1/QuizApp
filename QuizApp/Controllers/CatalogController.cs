@@ -64,12 +64,11 @@ namespace QuizApp.Controllers
         {
             var catalog = _context.Catalogs
                                   .FirstOrDefault(c => c.Id == id);
-
             if (catalog == null)
                 return NotFound();
 
-
             var questions = _context.Questions
+                                    .Include(q => q.Answers) 
                                     .Where(q => q.CatalogId == id)
                                     .ToList();
 
@@ -78,7 +77,6 @@ namespace QuizApp.Controllers
                 Catalog = catalog,
                 Questions = questions
             };
-
             return View(model);
         }
 

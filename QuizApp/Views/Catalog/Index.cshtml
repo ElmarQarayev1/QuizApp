@@ -1,113 +1,260 @@
 ﻿@model List<QuizApp.Models.Catalog>
-
 @{
     ViewData["Title"] = "Kataloqlar";
 }
 
 <style>
     body {
-        background-color: #ffffff; /* Arxa fon ağ */
-        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    .container {
-        padding: 40px;
+    .page-header {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
 
-    .card {
-        background-color: #ffffff; /* Kartın fonu ağ */
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        transition: transform 0.3s, box-shadow 0.3s;
+    .page-title {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0;
     }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 123, 255, 0.2);
+    .catalog-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: none;
+        border-radius: 20px;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        overflow: hidden;
+        position: relative;
+        height: 100%;
+    }
+
+    .catalog-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .catalog-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .catalog-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+    }
+
+    .catalog-card-body {
+        padding: 30px;
+        text-align: center;
+    }
+
+    .catalog-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 2.5rem;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        transition: transform 0.3s ease;
+    }
+
+    .catalog-card:hover .catalog-icon {
+        transform: rotate(360deg) scale(1.1);
+    }
+
+    .catalog-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 15px;
+    }
+
+    .catalog-stats {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        color: #667eea;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn-modern {
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-details {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .btn-details:hover {
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        transform: translateY(-2px);
+        color: white;
+    }
+
+    .btn-edit {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+    }
+
+    .btn-edit:hover {
+        box-shadow: 0 5px 20px rgba(245, 87, 108, 0.4);
+        transform: translateY(-2px);
+        color: white;
+    }
+
+    .btn-delete {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        color: white;
+        border: none;
+    }
+
+    .btn-delete:hover {
+        box-shadow: 0 5px 20px rgba(250, 112, 154, 0.4);
+        transform: translateY(-2px);
+    }
+
+    .btn-create {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 15px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-create:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(102, 126, 234, 0.5);
+        color: white;
+    }
+
+    .empty-state {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 60px 40px;
+        text-align: center;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .empty-icon {
+        font-size: 5rem;
+        margin-bottom: 20px;
+        opacity: 0.6;
+    }
+
+    .empty-title {
+        font-size: 1.8rem;
+        color: #2d3748;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .empty-text {
+        color: #718096;
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+    }
+
+    .container-custom {
+        padding: 40px 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    @@media (max-width: 768px) {
+        .page-title {
+            font-size: 2rem;
         }
 
-    .card-body {
-        padding: 20px;
-    }
-
-    .btn-outline-primary {
-        border-color: #007bff;
-        color: #007bff;
-        transition: background-color 0.3s, color 0.3s;
-    }
-
-        .btn-outline-primary:hover {
-            background-color: #007bff;
-            color: white;
+        .catalog-card-body {
+            padding: 20px;
         }
-
-    .btn-outline-info {
-        border-color: #17a2b8;
-        color: #17a2b8;
-        transition: background-color 0.3s, color 0.3s;
     }
-
-        .btn-outline-info:hover {
-            background-color: #17a2b8;
-            color: white;
-        }
-
-    .btn-outline-danger {
-        border-color: #dc3545;
-        color: #dc3545;
-        transition: background-color 0.3s, color 0.3s;
-    }
-
-        .btn-outline-danger:hover {
-            background-color: #dc3545;
-            color: white;
-        }
-
-    .text-primary {
-        color: #007bff; /* Mavi başlıq */
-    }
-
-    .alert-info {
-        background-color: #eaf2f7;
-        color: #007bff;
-    }
-
-    .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
-        transition: background-color 0.3s;
-    }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
 </style>
-
-<div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-primary">Kataloqlar</h2>
-        <a asp-action="Create" class="btn btn-primary">Yeni Kataloq Yarat</a>
+<div class="container-custom">
+    <div class="page-header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="page-title">📚 Kataloqlar</h1>
+                <p class="text-muted mb-0">Bütün sual kataloqlarınızı idarə edin</p>
+            </div>
+            <a asp-action="Create" class="btn btn-create">
+                ✨ Yeni Kataloq Yarat
+            </a>
+        </div>
     </div>
 
     @if (Model != null && Model.Any())
     {
-        <div class="row">
+        <div class="row g-4">
             @foreach (var catalog in Model)
             {
-                <div class="col-md-4 mb-4">
-                    <div class="card shadow-sm">
-                        <div class="card-body text-center">
-                            <h5 class="card-title text-primary">@catalog.Title</h5>
-                            <div class="d-flex justify-content-center gap-2 mt-3">
-                                <a asp-action="Details" asp-route-id="@catalog.Id" class="btn btn-outline-info btn-sm">Detallar</a>
-                                <a asp-action="Edit" asp-route-id="@catalog.Id" class="btn btn-outline-primary btn-sm">Redaktə Et</a>
-                                @*<a asp-action="Delete" asp-route-id="@catalog.Id" class="btn btn-outline-danger btn-sm">Sil</a>*@
-                                <form asp-action="DeleteConfirmed" method="post">
+                <div class="col-lg-4 col-md-6">
+                    <div class="catalog-card">
+                        <div class="catalog-card-body">
+                            <div class="catalog-icon">
+                                📖
+                            </div>
+                            <h3 class="catalog-title">@catalog.Title</h3>
+                          
+                            <div class="action-buttons">
+                                <a asp-action="Details" asp-route-id="@catalog.Id" class="btn btn-details btn-modern">
+                                    👁️ Bax
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@catalog.Id" class="btn btn-edit btn-modern">
+                                    ✏️ Redaktə
+                                </a>
+                                <form asp-action="DeleteConfirmed" method="post" style="display: inline;"
+                                      onsubmit="return confirm('Bu kataloqu və içindəki bütün sualları silmək istədiyinizdən əminsiniz?');">
+                                    @Html.AntiForgeryToken()
                                     <input type="hidden" name="id" value="@catalog.Id" />
-                                    <button type="submit" class="btn btn-outline-danger btn-sm">Sil</button>
-                                   
+                                    <button type="submit" class="btn btn-delete btn-modern">
+                                        🗑️ Sil
+                                    </button>
                                 </form>
-
                             </div>
                         </div>
                     </div>
@@ -117,8 +264,13 @@
     }
     else
     {
-        <div class="alert alert-info text-center">
-            Heç bir kataloq mövcud deyil.
+        <div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <h2 class="empty-title">Heç bir kataloq tapılmadı</h2>
+            <p class="empty-text">İlk kataloqunuzu yaradaraq başlayın!</p>
+            <a asp-action="Create" class="btn btn-create">
+                🚀 İlk Kataloqu Yarat
+            </a>
         </div>
     }
 </div>

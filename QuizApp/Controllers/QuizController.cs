@@ -362,6 +362,160 @@ namespace QuizApp.Controllers
             return RedirectToAction("Index");
         }
 
+      
+        public IActionResult EditQuestion(int id)
+        {
+            var question = _context.Questions
+                .Include(q => q.Answers)
+                .Include(q => q.Catalog)
+                .FirstOrDefault(q => q.Id == id);
+
+            if (question == null) return NotFound();
+
+            var model = new QuestionEditViewModel
+            {
+                Id = question.Id,
+                Text = question.Text,
+                CatalogId = question.CatalogId ?? 0,
+                ImageUrl = question.ImageUrl,
+                Answers = question.Answers.Select(a => new AnswerEditViewModel
+                {
+                    Id = a.Id,
+                    Text = a.Text,
+                    IsCorrect = a.IsCorrect
+                }).ToList()
+            };
+
+            ViewBag.Catalogs = _context.Catalogs.ToList();
+            return View(model);
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public IActionResult EditQuestions(QuestionEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Catalogs = _context.Catalogs.ToList();
+                return View(model);
+            }
+
+            var question = _context.Questions
+                .Include(q => q.Answers)
+                .FirstOrDefault(q => q.Id == model.Id);
+
+            if (question == null) return NotFound();
+
+            question.Text = model.Text;
+            question.CatalogId = model.CatalogId;
+
+          
+            if (model.DeleteImage && !string.IsNullOrEmpty(question.ImageUrl))
+            {
+                var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", question.ImageUrl.TrimStart('/'));
+                if (System.IO.File.Exists(oldFilePath))
+                {
+                    System.IO.File.Delete(oldFilePath);
+                }
+                question.ImageUrl = null;
+            }
+            
+            else if (model.ImageFile != null)
+            {
+               
+                if (!string.IsNullOrEmpty(question.ImageUrl))
+                {
+                    var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", question.ImageUrl.TrimStart('/'));
+                    if (System.IO.File.Exists(oldFilePath))
+                    {
+                        System.IO.File.Delete(oldFilePath);
+                    }
+                }
+
+               
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/questions");
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                var uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ImageFile.FileName;
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.ImageFile.CopyTo(fileStream);
+                }
+
+                question.ImageUrl = "/uploads/questions/" + uniqueFileName;
+            }
+
+         
+            var existingAnswerIds = question.Answers.Select(a => a.Id).ToList();
+            var modelAnswerIds = model.Answers.Where(a => a.Id > 0).Select(a => a.Id).ToList();
+
+          
+            var answersToDelete = question.Answers.Where(a => !modelAnswerIds.Contains(a.Id)).ToList();
+            _context.Answers.RemoveRange(answersToDelete);
+
+            foreach (var answerModel in model.Answers)
+            {
+                if (answerModel.Id > 0)
+                {
+                    
+                    var answer = question.Answers.FirstOrDefault(a => a.Id == answerModel.Id);
+                    if (answer != null)
+                    {
+                        answer.Text = answerModel.Text;
+                        answer.IsCorrect = answerModel.IsCorrect;
+                    }
+                }
+                else
+                {
+                    
+                    question.Answers.Add(new Answer
+                    {
+                        Text = answerModel.Text,
+                        IsCorrect = answerModel.IsCorrect,
+                        QuestionId = question.Id
+                    });
+                }
+            }
+
+            _context.SaveChanges();
+            return RedirectToAction("Details", "Catalog", new { id = question.CatalogId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteQuestion(int id)
+        {
+            var question = _context.Questions
+                .Include(q => q.Answers)
+                .FirstOrDefault(q => q.Id == id);
+
+            if (question == null) return NotFound();
+
+            int catalogId = question.CatalogId ?? 0;
+
+           
+            if (!string.IsNullOrEmpty(question.ImageUrl))
+            {
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", question.ImageUrl.TrimStart('/'));
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            }
+
+           
+            _context.Answers.RemoveRange(question.Answers);
+
+          
+            _context.Questions.Remove(question);
+            _context.SaveChanges();
+
+            return RedirectToAction("Details", "Catalog", new { id = catalogId });
+        }
+
 
     }
 }

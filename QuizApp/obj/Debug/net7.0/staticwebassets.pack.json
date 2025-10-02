@@ -17,8 +17,8 @@
       "PackagePath": "staticwebassets/favicon.ico"
     },
     {
-      "Id": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/img/asanx.jpeg",
-      "PackagePath": "staticwebassets/img/asanx.jpeg"
+      "Id": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/img/.DS_Store",
+      "PackagePath": "staticwebassets/img/.DS_Store"
     },
     {
       "Id": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/img/fc.png",
@@ -37,18 +37,6 @@
       "PackagePath": "staticwebassets/img/sabah.png"
     },
     {
-      "Id": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/img/testimonial-1.jpg",
-      "PackagePath": "staticwebassets/img/testimonial-1.jpg"
-    },
-    {
-      "Id": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/img/testimonial-2.jpg",
-      "PackagePath": "staticwebassets/img/testimonial-2.jpg"
-    },
-    {
-      "Id": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/img/user.jpg",
-      "PackagePath": "staticwebassets/img/user.jpg"
-    },
-    {
       "Id": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/js/main.js",
       "PackagePath": "staticwebassets/js/main.js"
     },
@@ -63,6 +51,10 @@
     {
       "Id": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/lib/easing/easing.min.js",
       "PackagePath": "staticwebassets/lib/easing/easing.min.js"
+    },
+    {
+      "Id": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/lib/owlcarousel/.DS_Store",
+      "PackagePath": "staticwebassets/lib/owlcarousel/.DS_Store"
     },
     {
       "Id": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/lib/owlcarousel/LICENSE",
@@ -99,10 +91,6 @@
     {
       "Id": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/lib/owlcarousel/assets/owl.video.play.png",
       "PackagePath": "staticwebassets/lib/owlcarousel/assets/owl.video.play.png"
-    },
-    {
-      "Id": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/lib/owlcarousel/owl.carousel.js",
-      "PackagePath": "staticwebassets/lib/owlcarousel/owl.carousel.js"
     },
     {
       "Id": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/lib/owlcarousel/owl.carousel.min.js",

@@ -457,6 +457,22 @@
       "PackagePath": "staticwebassets/scss/bootstrap/scss/vendor/_rfs.scss"
     },
     {
+      "Id": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/uploads/questions/064ffc11-0b87-4fc0-b829-758922fe241b_contact1.png",
+      "PackagePath": "staticwebassets/uploads/questions/064ffc11-0b87-4fc0-b829-758922fe241b_contact1.png"
+    },
+    {
+      "Id": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/uploads/questions/64676406-f2a5-4a21-abe1-293f9ab5b092_contact2.png",
+      "PackagePath": "staticwebassets/uploads/questions/64676406-f2a5-4a21-abe1-293f9ab5b092_contact2.png"
+    },
+    {
+      "Id": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/uploads/questions/9f9e9d07-4b34-406a-b131-3ae83b3e88c9_contact3.png",
+      "PackagePath": "staticwebassets/uploads/questions/9f9e9d07-4b34-406a-b131-3ae83b3e88c9_contact3.png"
+    },
+    {
+      "Id": "/Users/elmar/Desktop/QuizApp/QuizApp/wwwroot/uploads/questions/fe3a555e-71ad-431a-963d-507a4ba40113_contact3.png",
+      "PackagePath": "staticwebassets/uploads/questions/fe3a555e-71ad-431a-963d-507a4ba40113_contact3.png"
+    },
+    {
       "Id": "obj/Debug/net7.0/staticwebassets/msbuild.QuizApp.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

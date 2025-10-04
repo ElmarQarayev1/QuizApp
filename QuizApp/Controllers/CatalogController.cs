@@ -133,7 +133,6 @@ namespace QuizApp.Controllers
             return RedirectToAction("Index");
         }
 
-
     }
 }
 

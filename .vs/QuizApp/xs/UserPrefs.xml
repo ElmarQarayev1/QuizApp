@@ -1,32 +1,68 @@
 ﻿<Properties StartupConfiguration="{71CEE7B1-33D5-4C8E-816C-3B200F4E079B}|https">
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.ItemProperties.QuizApp PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="QuizApp/Properties/launchSettings.json">
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.Workbench ActiveDocument="QuizApp/Controllers/QuizController.cs">
     <Files>
-      <File FileName="QuizApp/appsettings.json" Line="14" Column="1" />
-      <File FileName="QuizApp/Program.cs" Line="79" Column="24" />
-      <File FileName="QuizApp/Controllers/AccountController.cs" Line="142" Column="44" />
-      <File FileName="QuizApp/Controllers/CatalogController.cs" Line="1" Column="1" />
-      <File FileName="QuizApp/Controllers/HomeController.cs" Line="1" Column="1" />
-      <File FileName="QuizApp/Controllers/QuizController.cs" Line="1" Column="1" />
-      <File FileName="QuizApp/Properties/launchSettings.json" Line="22" Column="29" />
+      <File FileName="QuizApp/appsettings.json" />
+      <File FileName="QuizApp/Program.cs" />
+      <File FileName="QuizApp/Controllers/AccountController.cs" Line="1" Column="1" />
+      <File FileName="QuizApp/Controllers/CatalogController.cs" Line="109" Column="35" />
+      <File FileName="QuizApp/Controllers/HomeController.cs" />
+      <File FileName="QuizApp/Controllers/QuizController.cs" Line="425" Column="11" />
+      <File FileName="QuizApp/Properties/launchSettings.json" />
+      <File FileName="QuizApp/Models/Question.cs" Line="25" Column="1" />
+      <File FileName="QuizApp/Views/Quiz/CreateQuestions.cshtml" Line="612" Column="2" />
+      <File FileName="QuizApp/Data/AppDbContext.cs" />
+      <File FileName="QuizApp/Views/Catalog/Index.cshtml" />
+      <File FileName="QuizApp/Views/Catalog/Details.cshtml" Line="353" Column="15" />
+      <File FileName="QuizApp/Views/Catalog/Edit.cshtml" />
+      <File FileName="QuizApp/Models/Catalog.cs" />
+      <File FileName="QuizApp/Models/ViewModels/QuestionEditViewModel.cs" Line="25" Column="59" />
+      <File FileName="QuizApp/Models/ViewModels/AnswerEditViewModel.cs" />
+      <File FileName="QuizApp/Models/ViewModels/CatalogDetailsViewModel.cs" />
+      <File FileName="QuizApp/Views/Quiz/Edit.cshtml" />
+      <File FileName="QuizApp/Views/Quiz/CreateQuiz.cshtml" Line="227" Column="9" />
+      <File FileName="QuizApp/Views/Catalog/Create.cshtml" />
+      <File FileName="QuizApp/Views/Home/Index.cshtml" />
+      <File FileName="QuizApp/Views/Quiz/Index.cshtml" />
+      <File FileName="QuizApp/Views/Shared/_Layout.cshtml" />
+      <File FileName="QuizApp/Views/Account/Login.cshtml" />
+      <File FileName="QuizApp/Views/Account/Register.cshtml" />
+      <File FileName="QuizApp/Views/Quiz/Result.cshtml" />
+      <File FileName="QuizApp/Views/Quiz/ReviewWrongQuestions.cshtml" />
+      <File FileName="QuizApp/Views/Quiz/TakeQuiz.cshtml" />
+      <File FileName="QuizApp/Models/ViewModels/QuestionCreateViewModel.cs" Line="20" Column="88" />
+      <File FileName="QuizApp/Views/Quiz/EditQuestion.cshtml" Line="529" Column="1" />
+      <File FileName="QuizApp/Models/ViewModels/QuestionViewModel.cs" Line="16" Column="1" />
+      <File FileName="QuizApp/Models/ViewModels/AnswerViewModel.cs" Line="12" Column="1" />
+      <File FileName="QuizApp/Models/ViewModels/QuizAddQuestionViewModel.cs" Line="15" Column="1" />
+      <File FileName="QuizApp/Models/ViewModels/QuizCreateViewModel.cs" Line="36" Column="6" />
+      <File FileName="QuizApp/Models/QuestionDifficulty.cs" Line="19" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="QuizApp" expanded="True">
             <Node name="QuizApp">
-              <Node name="Controllers" expanded="True" />
-              <Node name="Program.cs" selected="True" />
+              <Node name="Controllers">
+                <Node name="QuizController.cs" selected="True" />
+              </Node>
+              <Node name="Views" expanded="True">
+                <Node name="Quiz" expanded="True" />
+                <Node name="Shared" expanded="True" />
+              </Node>
+              <Node name="wwwroot" expanded="True">
+                <Node name="uploads" expanded="True" />
+              </Node>
             </Node>
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.ItemProperties.QuizApp PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
   <MultiItemStartupConfigurations />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

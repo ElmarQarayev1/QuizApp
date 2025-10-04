@@ -1,5 +1,4 @@
-﻿
-@model QuizApp.Models.ViewModels.QuestionEditViewModel
+﻿@model QuizApp.Models.ViewModels.QuestionEditViewModel
 
 @{
     ViewData["Title"] = "Sualı Redaktə Et";
@@ -67,6 +66,69 @@
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+    .difficulty-select-wrapper {
+        display: flex;
+        gap: 12px;
+        margin-top: 10px;
+    }
+
+    .difficulty-option {
+        flex: 1;
+    }
+
+    .difficulty-radio {
+        display: none;
+    }
+
+    .difficulty-label {
+        display: block;
+        padding: 12px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .difficulty-label.easy {
+            color: #28a745;
+            background: #f0fff4;
+        }
+
+        .difficulty-label.medium {
+            color: #ffc107;
+            background: #fffbf0;
+        }
+
+        .difficulty-label.hard {
+            color: #dc3545;
+            background: #fff5f5;
+        }
+
+    .difficulty-radio:checked + .difficulty-label {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+        .difficulty-radio:checked + .difficulty-label.easy {
+            border-color: #28a745;
+            background: #28a745;
+            color: white;
+        }
+
+        .difficulty-radio:checked + .difficulty-label.medium {
+            border-color: #ffc107;
+            background: #ffc107;
+            color: white;
+        }
+
+        .difficulty-radio:checked + .difficulty-label.hard {
+            border-color: #dc3545;
+            background: #dc3545;
+            color: white;
         }
 
     .image-preview-section {
@@ -288,7 +350,7 @@
 <div class="edit-question-page">
     <div class="edit-question-container">
         <div class="page-header">
-            <h2 class="page-title">✏️ Sualı Redaktə Et</h2>
+            <h2 class="page-title">Sualı Redaktə Et</h2>
         </div>
 
         <div class="form-card">
@@ -297,13 +359,34 @@
                 <input type="hidden" asp-for="ImageUrl" />
 
                 <div class="form-section">
-                    <label class="section-label">📝 Sual Mətni</label>
+                    <label class="section-label">Sual Mətni</label>
                     <input type="text" asp-for="Text" class="form-input" placeholder="Sualı daxil edin..." />
                     <span asp-validation-for="Text" class="text-danger"></span>
                 </div>
 
                 <div class="form-section">
-                    <label class="section-label">📚 Kataloq</label>
+                    <label class="section-label">Çətinlik Dərəcəsi</label>
+                    <div class="difficulty-select-wrapper">
+                        <div class="difficulty-option">
+                            <input type="radio" asp-for="Difficulty" value="1" class="difficulty-radio"
+                                   id="diff_easy" checked="@(Model.Difficulty == QuizApp.Models.QuestionDifficulty.Easy)" />
+                            <label for="diff_easy" class="difficulty-label easy">Asan</label>
+                        </div>
+                        <div class="difficulty-option">
+                            <input type="radio" asp-for="Difficulty" value="2" class="difficulty-radio"
+                                   id="diff_medium" checked="@(Model.Difficulty == QuizApp.Models.QuestionDifficulty.Medium)" />
+                            <label for="diff_medium" class="difficulty-label medium">Orta</label>
+                        </div>
+                        <div class="difficulty-option">
+                            <input type="radio" asp-for="Difficulty" value="3" class="difficulty-radio"
+                                   id="diff_hard" checked="@(Model.Difficulty == QuizApp.Models.QuestionDifficulty.Hard)" />
+                            <label for="diff_hard" class="difficulty-label hard">Çətin</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <label class="section-label">Kataloq</label>
                     <select asp-for="CatalogId" class="form-input">
                         @foreach (var catalog in ViewBag.Catalogs)
                         {
@@ -313,14 +396,14 @@
                 </div>
 
                 <div class="form-section">
-                    <label class="section-label">🖼️ Şəkil</label>
+                    <label class="section-label">Şəkil</label>
                     <div id="currentImageSection">
                         @if (!string.IsNullOrEmpty(Model.ImageUrl))
                         {
                             <div class="image-preview-section">
                                 <img src="@Model.ImageUrl" alt="Sual Şəkili" class="preview-image" id="currentImage" />
                                 <button type="button" class="delete-image-btn" onclick="deleteImage()" id="deleteImageBtn">
-                                    🗑️ Şəkli Sil
+                                    Şəkli Sil
                                 </button>
                             </div>
                             <input type="hidden" name="DeleteImage" value="false" id="deleteImageFlag" />
@@ -333,13 +416,13 @@
                 </div>
 
                 <div class="form-section" id="uploadImageSection">
-                    <label class="section-label">📤 Yeni Şəkil Yüklə (istəyə bağlı)</label>
+                    <label class="section-label">Yeni Şəkil Yüklə (istəyə bağlı)</label>
                     <input type="file" asp-for="ImageFile" class="form-input" />
                 </div>
 
                 <div class="answers-section">
                     <div class="answers-header">
-                        <h5 class="answers-title">💡 Cavablar</h5>
+                        <h5 class="answers-title">Cavablar</h5>
                     </div>
                     <div id="answers">
                         @for (int i = 0; i < Model.Answers.Count; i++)
@@ -352,7 +435,7 @@
                                     @if (Model.Answers.Count > 1)
                                     {
                                         <button type="button" class="delete-answer-btn" onclick="deleteAnswer(this)">
-                                            🗑️ Sil
+                                            Sil
                                         </button>
                                     }
                                 </div>
@@ -363,7 +446,7 @@
                                 <div class="correct-answer-check">
                                     <input type="checkbox" name="Answers[@i].IsCorrect" value="true"
                                            @(Model.Answers[i].IsCorrect ? "checked" : "") id="correct_@i" />
-                                    <label for="correct_@i">✓ Doğru Cavab</label>
+                                    <label for="correct_@i">Doğru Cavab</label>
                                 </div>
                             </div>
                         }
@@ -376,10 +459,10 @@
 
                 <div class="form-actions">
                     <a asp-controller="Catalog" asp-action="Details" asp-route-id="@Model.CatalogId" class="btn-back">
-                        ← Geri
+                        Geri
                     </a>
                     <button type="submit" class="btn-save">
-                        💾 Yadda Saxla
+                        Yadda Saxla
                     </button>
                 </div>
             </form>
@@ -403,7 +486,7 @@
                 let noImageText = document.createElement('p');
                 noImageText.className = 'no-image-text';
                 noImageText.id = 'noImageText';
-                noImageText.textContent = '🗑️ Şəkil silinəcək (formu saxladıqdan sonra)';
+                noImageText.textContent = 'Şəkil silinəcək (formu saxladıqdan sonra)';
                 imageSection.appendChild(noImageText);
             }
         }
@@ -416,7 +499,7 @@
                     <div class="answer-header">
                         <span class="answer-label-text">Cavab ${answerCount + 1}</span>
                         <button type="button" class="delete-answer-btn" onclick="deleteAnswer(this)">
-                            🗑️ Sil
+                            Sil
                         </button>
                     </div>
 
@@ -425,7 +508,7 @@
 
                     <div class="correct-answer-check">
                         <input type="checkbox" name="Answers[${answerCount}].IsCorrect" value="true" id="correct_${answerCount}" />
-                        <label for="correct_${answerCount}">✓ Doğru Cavab</label>
+                        <label for="correct_${answerCount}">Doğru Cavab</label>
                     </div>
                 </div>
             `;
@@ -440,7 +523,7 @@
                 button.closest(".answer-card").remove();
                 updateAnswerIndexes();
             } else {
-                alert("❌ Ən azı bir cavab olmalıdır!");
+                alert("Ən azı bir cavab olmalıdır!");
             }
         }
 
@@ -465,4 +548,3 @@
         }
     </script>
 }
-

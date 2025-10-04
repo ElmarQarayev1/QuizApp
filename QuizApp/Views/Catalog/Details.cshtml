@@ -12,6 +12,31 @@
         margin-bottom: 30px;
     }
 
+    .stats-row {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+    }
+
+    .stat-card {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 15px 20px;
+        border-radius: 8px;
+        backdrop-filter: blur(10px);
+    }
+
+    .stat-number {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .stat-label {
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
     .question-card {
         background-color: white;
         border-radius: 10px;
@@ -19,6 +44,7 @@
         padding: 20px;
         margin-bottom: 20px;
         transition: transform 0.2s;
+        position: relative;
     }
 
         .question-card:hover {
@@ -26,11 +52,39 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
+    .difficulty-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+        .difficulty-badge.easy {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .difficulty-badge.medium {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: white;
+        }
+
+        .difficulty-badge.hard {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+
     .question-text {
         font-size: 18px;
         font-weight: 600;
         color: #333;
         margin-bottom: 15px;
+        padding-right: 100px;
     }
 
     .question-image {
@@ -100,12 +154,89 @@
             background-color: #c82333;
             color: white;
         }
+
+    .filter-buttons {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .filter-btn {
+        padding: 8px 20px;
+        border: 2px solid;
+        border-radius: 20px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: white;
+    }
+
+        .filter-btn.all {
+            border-color: #6c757d;
+            color: #6c757d;
+        }
+
+            .filter-btn.all:hover,
+            .filter-btn.all.active {
+                background: #6c757d;
+                color: white;
+            }
+
+        .filter-btn.easy {
+            border-color: #28a745;
+            color: #28a745;
+        }
+
+            .filter-btn.easy:hover,
+            .filter-btn.easy.active {
+                background: #28a745;
+                color: white;
+            }
+
+        .filter-btn.medium {
+            border-color: #ffc107;
+            color: #ffc107;
+        }
+
+            .filter-btn.medium:hover,
+            .filter-btn.medium.active {
+                background: #ffc107;
+                color: white;
+            }
+
+        .filter-btn.hard {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+
+            .filter-btn.hard:hover,
+            .filter-btn.hard.active {
+                background: #dc3545;
+                color: white;
+            }
 </style>
 
 <div class="container mt-4">
     <div class="catalog-header">
-        <h2>📚 @Model.Catalog.Title</h2>
+        <h2>@Model.Catalog.Title</h2>
         <p class="mb-0">Bu kataloqda @(Model.Questions?.Count ?? 0) sual mövcuddur</p>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-number">@(Model.Questions?.Count(q => q.Difficulty == QuizApp.Models.QuestionDifficulty.Easy) ?? 0)</div>
+                <div class="stat-label">Asan Suallar</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@(Model.Questions?.Count(q => q.Difficulty == QuizApp.Models.QuestionDifficulty.Medium) ?? 0)</div>
+                <div class="stat-label">Orta Suallar</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@(Model.Questions?.Count(q => q.Difficulty == QuizApp.Models.QuestionDifficulty.Hard) ?? 0)</div>
+                <div class="stat-label">Çətin Suallar</div>
+            </div>
+        </div>
+
         <div class="mt-3">
             <a asp-action="Edit" asp-route-id="@Model.Catalog.Id" class="btn btn-light btn-sm">
                 Kataloqu Redaktə Et
@@ -118,13 +249,35 @@
 
     @if (Model.Questions != null && Model.Questions.Any())
     {
+        <div class="filter-buttons">
+            <button class="filter-btn all active" onclick="filterQuestions('all')">
+                Hamısı (@Model.Questions.Count)
+            </button>
+            <button class="filter-btn easy" onclick="filterQuestions('easy')">
+                Asan (@Model.Questions.Count(q => q.Difficulty == QuizApp.Models.QuestionDifficulty.Easy))
+            </button>
+            <button class="filter-btn medium" onclick="filterQuestions('medium')">
+                Orta (@Model.Questions.Count(q => q.Difficulty == QuizApp.Models.QuestionDifficulty.Medium))
+            </button>
+            <button class="filter-btn hard" onclick="filterQuestions('hard')">
+                Çətin (@Model.Questions.Count(q => q.Difficulty == QuizApp.Models.QuestionDifficulty.Hard))
+            </button>
+        </div>
+
         <h3 class="mb-4">Suallar</h3>
 
         @foreach (var question in Model.Questions)
         {
-            <div class="question-card">
+            var difficultyClass = question.Difficulty == QuizApp.Models.QuestionDifficulty.Easy ? "easy" :
+                                 question.Difficulty == QuizApp.Models.QuestionDifficulty.Medium ? "medium" : "hard";
+            var difficultyText = question.Difficulty == QuizApp.Models.QuestionDifficulty.Easy ? "Asan" :
+                                question.Difficulty == QuizApp.Models.QuestionDifficulty.Medium ? "Orta" : "Çətin";
+
+            <div class="question-card" data-difficulty="@difficultyClass">
+                <span class="difficulty-badge @difficultyClass">@difficultyText</span>
+
                 <div class="question-text">
-                    ❓ @question.Text
+                    @question.Text
                 </div>
 
                 @if (!string.IsNullOrEmpty(question.ImageUrl))
@@ -144,7 +297,7 @@
                                 <span class="answer-text">@answer.Text</span>
                                 @if (answer.IsCorrect)
                                 {
-                                    <span class="correct-badge">✓ Doğru</span>
+                                    <span class="correct-badge">Doğru</span>
                                 }
                             </div>
                         }
@@ -154,13 +307,14 @@
                 <div class="action-buttons">
                     <a asp-controller="Quiz" asp-action="EditQuestion" asp-route-id="@question.Id"
                        class="btn btn-edit btn-sm">
-                        ✏️ Redaktə Et
+                        Redaktə Et
                     </a>
                     <form asp-controller="Quiz" asp-action="DeleteQuestion" asp-route-id="@question.Id"
-                          method="post" style="display: inline;">
+                          method="post" style="display: inline;"
+                          onsubmit="return confirm('Bu sualı silmək istədiyinizdən əminsiniz?');">
                         @Html.AntiForgeryToken()
                         <button type="submit" class="btn btn-delete btn-sm">
-                            🗑️ Sil
+                            Sil
                         </button>
                     </form>
                 </div>
@@ -170,10 +324,30 @@
     else
     {
         <div class="alert alert-info">
-            <strong>ℹ️ Məlumat:</strong> Bu kataloqda heç bir sual mövcud deyil.
+            <strong>Məlumat:</strong> Bu kataloqda heç bir sual mövcud deyil.
             <a asp-controller="Quiz" asp-action="CreateQuestions" class="alert-link">
                 İlk sualı əlavə edin
             </a>
         </div>
     }
 </div>
+
+<script>function filterQuestions(difficulty) {
+        const cards = document.querySelectorAll('.question-card');
+        const buttons = document.querySelectorAll('.filter-btn');
+
+        buttons.forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+
+        cards.forEach(card => {
+            if (difficulty === 'all') {
+                card.style.display = 'block';
+            } else {
+                if (card.dataset.difficulty === difficulty) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            }
+        });
+    }</script>

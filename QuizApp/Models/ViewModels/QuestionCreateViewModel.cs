@@ -16,6 +16,9 @@ namespace QuizApp.Models.ViewModels
 
         public List<AnswerCreateViewModel> Answers { get; set; } = new List<AnswerCreateViewModel>();
 
+        [Required]
+        public QuestionDifficulty Difficulty { get; set; } = QuestionDifficulty.Medium;
+
 
     }
 }

@@ -89,9 +89,9 @@
 /Users/elmar/Desktop/QuizApp/QuizApp/obj/Debug/net7.0/scopedcss/Views/Shared/_Layout.cshtml.rz.scp.css
 /Users/elmar/Desktop/QuizApp/QuizApp/obj/Debug/net7.0/scopedcss/bundle/QuizApp.styles.css
 /Users/elmar/Desktop/QuizApp/QuizApp/obj/Debug/net7.0/scopedcss/projectbundle/QuizApp.bundle.scp.css
-/Users/elmar/Desktop/QuizApp/QuizApp/obj/Debug/net7.0/QuizApp.csproj.CopyComplete
 /Users/elmar/Desktop/QuizApp/QuizApp/obj/Debug/net7.0/QuizApp.dll
 /Users/elmar/Desktop/QuizApp/QuizApp/obj/Debug/net7.0/refint/QuizApp.dll
 /Users/elmar/Desktop/QuizApp/QuizApp/obj/Debug/net7.0/QuizApp.pdb
 /Users/elmar/Desktop/QuizApp/QuizApp/obj/Debug/net7.0/QuizApp.genruntimeconfig.cache
 /Users/elmar/Desktop/QuizApp/QuizApp/obj/Debug/net7.0/ref/QuizApp.dll
+/Users/elmar/Desktop/QuizApp/QuizApp/obj/Debug/net7.0/QuizApp.csproj.CopyComplete

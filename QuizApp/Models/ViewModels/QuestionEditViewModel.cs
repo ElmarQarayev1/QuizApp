@@ -19,6 +19,10 @@ namespace QuizApp.Models.ViewModels
         public bool DeleteImage { get; set; }
 
         public List<AnswerEditViewModel> Answers { get; set; } = new List<AnswerEditViewModel>();
+
+
+        [Required]
+        public QuestionDifficulty Difficulty { get; set; }
     }
 }
 

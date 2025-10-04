@@ -34,7 +34,7 @@
         gap: 8px;
     }
 
-    .form-control, .catalogSelect {
+    .form-control {
         border: 2px solid #e2e8f0;
         border-radius: 12px;
         padding: 12px 18px;
@@ -42,79 +42,126 @@
         transition: all 0.3s ease;
         background: #f7fafc;
         font-weight: 500;
+        width: 100%;
     }
 
-    .form-control:focus, .catalogSelect:focus {
+    .form-control:focus {
         border-color: #667eea;
         box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
         background: white;
         outline: none;
     }
 
-    .catalog-group {
+    .difficulty-section {
         background: #f8f9fa;
         border-radius: 15px;
         padding: 25px;
-        margin-bottom: 20px;
+        margin-top: 25px;
         border: 2px solid #e9ecef;
-        transition: all 0.3s ease;
     }
 
-    .catalog-group:hover {
-        border-color: #667eea;
-        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.1);
+    .difficulty-section-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 20px;
+        text-align: center;
     }
 
-    .questionsContainer {
+    .difficulty-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
         margin-top: 20px;
+    }
+
+    .difficulty-card {
         background: white;
         border-radius: 12px;
         padding: 20px;
-    }
-
-    .question-item {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        padding: 15px;
-        border: 2px solid #e2e8f0;
-        border-radius: 12px;
-        margin-bottom: 12px;
+        border: 3px solid transparent;
         transition: all 0.3s ease;
-        background: white;
+        text-align: center;
     }
 
-    .question-item:hover {
-        border-color: #667eea;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
-        transform: translateX(5px);
+    .difficulty-card.easy {
+        border-color: #28a745;
     }
 
-    .form-check-input {
-        width: 20px;
-        height: 20px;
-        border: 2px solid #cbd5e0;
-        border-radius: 6px;
-        cursor: pointer;
+    .difficulty-card.medium {
+        border-color: #ffc107;
     }
 
-    .form-check-input:checked {
-        background-color: #667eea;
-        border-color: #667eea;
+    .difficulty-card.hard {
+        border-color: #dc3545;
     }
 
-    .form-check-label {
-        flex: 1;
-        font-weight: 500;
-        color: #2d3748;
-        cursor: pointer;
+    .difficulty-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
     }
 
-    .question-image {
-        max-width: 80px;
-        height: auto;
+    .difficulty-icon {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+
+    .difficulty-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    .difficulty-card.easy .difficulty-title {
+        color: #28a745;
+    }
+
+    .difficulty-card.medium .difficulty-title {
+        color: #ffc107;
+    }
+
+    .difficulty-card.hard .difficulty-title {
+        color: #dc3545;
+    }
+
+    .difficulty-input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e2e8f0;
         border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        font-size: 1.2rem;
+        text-align: center;
+        font-weight: 700;
+        transition: all 0.3s ease;
+    }
+
+    .difficulty-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .difficulty-card.easy .difficulty-input:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+    }
+
+    .difficulty-card.medium .difficulty-input:focus {
+        border-color: #ffc107;
+        box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.1);
+    }
+
+    .difficulty-card.hard .difficulty-input:focus {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+    }
+
+    .info-text {
+        text-align: center;
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-top: 15px;
+        font-style: italic;
     }
 
     .btn-modern {
@@ -129,18 +176,6 @@
         align-items: center;
         gap: 8px;
         justify-content: center;
-    }
-
-    .btn-add-catalog {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        color: white;
-        width: 100%;
-        box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
-    }
-
-    .btn-add-catalog:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
     }
 
     .btn-submit {
@@ -177,16 +212,14 @@
         color: #f56565;
         font-size: 0.85rem;
         margin-top: 5px;
-    }
-
-    .empty-message {
-        text-align: center;
-        color: #a0aec0;
-        padding: 20px;
-        font-style: italic;
+        display: block;
     }
 
     @@media (max-width: 768px) {
+        .difficulty-cards {
+            grid-template-columns: 1fr;
+        }
+
         .button-group {
             flex-direction: column;
         }
@@ -201,7 +234,7 @@
 
         <div class="form-group">
             <label asp-for="Title" class="form-label">
-                📚 İmtahan Başlığı
+                İmtahan Başlığı
             </label>
             <input asp-for="Title" class="form-control" placeholder="Məsələn: Riyaziyyat Test 1" />
             <span asp-validation-for="Title" class="text-danger"></span>
@@ -209,163 +242,152 @@
 
         <div class="form-group">
             <label asp-for="DurationInMinutes" class="form-label">
-                ⏱️ Müddət (dəqiqə)
+                Müddət (dəqiqə)
             </label>
             <input asp-for="DurationInMinutes" class="form-control" type="number" min="1" max="180" placeholder="45" />
             <span asp-validation-for="DurationInMinutes" class="text-danger"></span>
         </div>
 
-        <div id="catalogsContainer">
-            <div class="form-group catalog-group">
-                <label class="form-label">🗂️ Kataloq Seçin</label>
-                <select class="form-control catalogSelect">
-                    <option value="">-- Kataloq seçin --</option>
-                    @foreach (var catalog in Model.ExistingCatalogs)
-                    {
-                        <option value="@catalog.Value">@catalog.Text</option>
-                    }
-                </select>
+        <div class="form-group">
+            <label asp-for="SelectedCatalogId" class="form-label">
+                Kataloq Seçin
+            </label>
+            <select asp-for="SelectedCatalogId" class="form-control" id="catalogSelect">
+                <option value="">-- Kataloq seçin --</option>
+                @foreach (var catalog in Model.ExistingCatalogs)
+                {
+                    <option value="@catalog.Value">@catalog.Text</option>
+                }
+            </select>
+            <span asp-validation-for="SelectedCatalogId" class="text-danger"></span>
+        </div>
 
-                <div class="questionsContainer" style="display:none;">
-                    <label class="form-label">📝 Sualları Seçin</label>
-                    <div class="questionsList"></div>
+        <div class="difficulty-section" id="difficultySection" style="display:none;">
+            <h3 class="difficulty-section-title">Çətinlik Dərəcəsinə Görə Sual Sayı</h3>
+
+            <div class="difficulty-cards">
+                <div class="difficulty-card easy">
+                    <div class="difficulty-icon">📗</div>
+                    <div class="difficulty-title">Asan Suallar</div>
+                    <input type="number" asp-for="EasyQuestionCount" class="difficulty-input"
+                           min="0" max="100" placeholder="0" value="0" />
+                    <div class="info-text" id="easyAvailable"></div>
                 </div>
+
+                <div class="difficulty-card medium">
+                    <div class="difficulty-icon">📙</div>
+                    <div class="difficulty-title">Orta Suallar</div>
+                    <input type="number" asp-for="MediumQuestionCount" class="difficulty-input"
+                           min="0" max="100" placeholder="0" value="0" />
+                    <div class="info-text" id="mediumAvailable"></div>
+                </div>
+
+                <div class="difficulty-card hard">
+                    <div class="difficulty-icon">📕</div>
+                    <div class="difficulty-title">Çətin Suallar</div>
+                    <input type="number" asp-for="HardQuestionCount" class="difficulty-input"
+                           min="0" max="100" placeholder="0" value="0" />
+                    <div class="info-text" id="hardAvailable"></div>
+                </div>
+            </div>
+
+            <div class="info-text" style="margin-top: 25px; font-size: 1rem;">
+                <strong>Ümumi: <span id="totalQuestions">0</span> sual</strong>
             </div>
         </div>
 
-        <button type="button" class="btn-modern btn-add-catalog" id="addCatalogButton">
-            ➕ Yeni Kataloq Əlavə Et
-        </button>
-
         <div class="button-group">
             <button type="submit" class="btn-modern btn-submit">
-                🚀 İmtahan Yarat
+                İmtahan Yarat
             </button>
             <a asp-action="Index" class="btn-modern btn-back">
-                ↩️ Geri Dön
+                Geri Dön
             </a>
         </div>
     </form>
 </div>
 
-<script>
-    let selectedQuestions = [];
-    const existingCatalogs = @Html.Raw(Json.Serialize(Model.ExistingCatalogs));
+@section Scripts {
+    <script>let availableQuestions = { easy: 0, medium: 0, hard: 0 };
 
-    document.addEventListener("DOMContentLoaded", function () {
-        attachCatalogChangeListeners();
-    });
+        document.getElementById('catalogSelect').addEventListener('change', function () {
+            const catalogId = this.value;
+            const difficultySection = document.getElementById('difficultySection');
 
-    function attachCatalogChangeListeners() {
-        document.querySelectorAll(".catalogSelect").forEach(select => {
-            select.addEventListener("change", function () {
-                const catalogId = this.value;
-                const container = this.closest('.catalog-group').querySelector('.questionsContainer');
-                const list = container.querySelector('.questionsList');
+            if (!catalogId) {
+                difficultySection.style.display = 'none';
+                return;
+            }
 
-                if (!catalogId) {
-                    container.style.display = "none";
-                    list.innerHTML = "";
-                    return;
-                }
+            fetch(`/Quiz/GetQuestionsByCatalogId?catalogId=${catalogId}`)
+                .then(response => response.json())
+                .then(questions => {
+                    availableQuestions.easy = questions.filter(q => q.difficulty === 1).length;
+                    availableQuestions.medium = questions.filter(q => q.difficulty === 2).length;
+                    availableQuestions.hard = questions.filter(q => q.difficulty === 3).length;
 
-                fetch(`/Quiz/GetQuestionsByCatalogId?catalogId=${catalogId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        list.innerHTML = "";
-                        if (data && data.length > 0) {
-                            data.forEach(q => {
-                                if (!selectedQuestions.includes(q.id)) {
-                                    const checkbox = document.createElement("input");
-                                    checkbox.type = "checkbox";
-                                    checkbox.className = "form-check-input";
-                                    checkbox.name = "SelectedQuestionIds[]";
-                                    checkbox.value = q.id;
-                                    checkbox.id = `question_${q.id}_${Date.now()}`;
-                                    checkbox.onclick = function () {
-                                        if (checkbox.checked) {
-                                            selectedQuestions.push(q.id);
-                                        } else {
-                                            selectedQuestions = selectedQuestions.filter(id => id !== q.id);
-                                        }
-                                    };
+                    document.getElementById('easyAvailable').textContent =
+                        `Mövcud: ${availableQuestions.easy} sual`;
+                    document.getElementById('mediumAvailable').textContent =
+                        `Mövcud: ${availableQuestions.medium} sual`;
+                    document.getElementById('hardAvailable').textContent =
+                        `Mövcud: ${availableQuestions.hard} sual`;
 
-                                    const label = document.createElement("label");
-                                    label.className = "form-check-label";
-                                    label.setAttribute("for", checkbox.id);
-                                    label.innerText = q.text;
-
-                                    const questionImageContainer = document.createElement("div");
-                                    if (q.image) {
-                                        const image = document.createElement("img");
-                                        image.src = q.image;
-                                        image.alt = "Sual Şəkili";
-                                        image.className = "question-image";
-                                        questionImageContainer.appendChild(image);
-                                    }
-
-                                    const div = document.createElement("div");
-                                    div.className = "question-item";
-                                    div.appendChild(checkbox);
-                                    div.appendChild(label);
-                                    div.appendChild(questionImageContainer);
-
-                                    list.appendChild(div);
-                                }
-                            });
-                            container.style.display = "block";
-                        } else {
-                            list.innerHTML = "<p class='empty-message'>Bu kataloq üçün heç bir sual tapılmadı.</p>";
-                            container.style.display = "block";
-                        }
-                    });
-            });
-        });
-    }
-
-    document.getElementById("addCatalogButton").addEventListener("click", function () {
-        const catalogsContainer = document.getElementById("catalogsContainer");
-        const newCatalogGroup = document.createElement("div");
-        newCatalogGroup.classList.add("form-group", "catalog-group");
-
-        const label = document.createElement("label");
-        label.className = "form-label";
-        label.textContent = "🗂️ Kataloq Seçin";
-
-        const select = document.createElement("select");
-        select.classList.add("form-control", "catalogSelect");
-
-        const defaultOption = document.createElement("option");
-        defaultOption.value = "";
-        defaultOption.text = "-- Kataloq seçin --";
-        select.appendChild(defaultOption);
-
-        existingCatalogs.forEach(catalog => {
-            const option = document.createElement("option");
-            option.value = catalog.value;
-            option.text = catalog.text;
-            select.appendChild(option);
+                    difficultySection.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Xəta:', error);
+                    alert('Suallar yüklənərkən xəta baş verdi');
+                });
         });
 
-        const questionsContainer = document.createElement("div");
-        questionsContainer.classList.add("questionsContainer");
-        questionsContainer.style.display = "none";
+        function updateTotalQuestions() {
+            const easy = parseInt(document.querySelector('input[name="EasyQuestionCount"]').value) || 0;
+            const medium = parseInt(document.querySelector('input[name="MediumQuestionCount"]').value) || 0;
+            const hard = parseInt(document.querySelector('input[name="HardQuestionCount"]').value) || 0;
 
-        const questionsLabel = document.createElement("label");
-        questionsLabel.className = "form-label";
-        questionsLabel.textContent = "📝 Sualları Seçin";
+            document.getElementById('totalQuestions').textContent = easy + medium + hard;
+        }
 
-        const questionsList = document.createElement("div");
-        questionsList.classList.add("questionsList");
+        document.querySelectorAll('.difficulty-input').forEach(input => {
+            input.addEventListener('input', updateTotalQuestions);
+        });
 
-        questionsContainer.appendChild(questionsLabel);
-        questionsContainer.appendChild(questionsList);
+        document.getElementById('quizForm').addEventListener('submit', function (e) {
+            const catalogId = document.getElementById('catalogSelect').value;
 
-        newCatalogGroup.appendChild(label);
-        newCatalogGroup.appendChild(select);
-        newCatalogGroup.appendChild(questionsContainer);
-        catalogsContainer.appendChild(newCatalogGroup);
+            if (!catalogId) {
+                e.preventDefault();
+                alert('Zəhmət olmasa kataloq seçin');
+                return;
+            }
 
-        attachCatalogChangeListeners();
-    });
-</script>
+            const easy = parseInt(document.querySelector('input[name="EasyQuestionCount"]').value) || 0;
+            const medium = parseInt(document.querySelector('input[name="MediumQuestionCount"]').value) || 0;
+            const hard = parseInt(document.querySelector('input[name="HardQuestionCount"]').value) || 0;
+
+            if (easy + medium + hard === 0) {
+                e.preventDefault();
+                alert('Ən azı bir sual seçməlisiniz');
+                return;
+            }
+
+            if (easy > availableQuestions.easy) {
+                e.preventDefault();
+                alert(`Asan suallar üçün maksimum ${availableQuestions.easy} sual mövcuddur`);
+                return;
+            }
+
+            if (medium > availableQuestions.medium) {
+                e.preventDefault();
+                alert(`Orta suallar üçün maksimum ${availableQuestions.medium} sual mövcuddur`);
+                return;
+            }
+
+            if (hard > availableQuestions.hard) {
+                e.preventDefault();
+                alert(`Çətin suallar üçün maksimum ${availableQuestions.hard} sual mövcuddur`);
+                return;
+            }
+        });</script>
+}

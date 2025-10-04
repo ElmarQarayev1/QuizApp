@@ -1,10 +1,7 @@
-﻿
-@model List<QuizApp.Models.ViewModels.QuestionCreateViewModel>
-
+﻿@model List<QuizApp.Models.ViewModels.QuestionCreateViewModel>
 @{
     ViewData["Title"] = "Yeni Sual Əlavə Et";
 }
-
 <style>
     .create-questions-page {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -32,6 +29,38 @@
         font-size: 32px;
         font-weight: 700;
         margin: 0;
+    }
+
+    .validation-summary-errors {
+        background: #f8d7da;
+        border: 2px solid #f5c6cb;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 25px;
+        color: #721c24;
+    }
+
+        .validation-summary-errors ul {
+            margin: 10px 0 0 0;
+            padding-left: 20px;
+        }
+
+        .validation-summary-errors li {
+            margin: 5px 0;
+            font-weight: 600;
+        }
+
+    .field-validation-error {
+        color: #dc3545;
+        font-size: 13px;
+        margin-top: 5px;
+        display: block;
+        font-weight: 600;
+    }
+
+    .input-validation-error {
+        border-color: #dc3545 !important;
+        background-color: #fff5f5;
     }
 
     .questions-wrapper {
@@ -112,6 +141,70 @@
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+    /* Difficulty badges */
+    .difficulty-select-wrapper {
+        display: flex;
+        gap: 12px;
+        margin-top: 10px;
+    }
+
+    .difficulty-option {
+        flex: 1;
+    }
+
+    .difficulty-radio {
+        display: none;
+    }
+
+    .difficulty-label {
+        display: block;
+        padding: 12px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .difficulty-label.easy {
+            color: #28a745;
+            background: #f0fff4;
+        }
+
+        .difficulty-label.medium {
+            color: #ffc107;
+            background: #fffbf0;
+        }
+
+        .difficulty-label.hard {
+            color: #dc3545;
+            background: #fff5f5;
+        }
+
+    .difficulty-radio:checked + .difficulty-label {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+        .difficulty-radio:checked + .difficulty-label.easy {
+            border-color: #28a745;
+            background: #28a745;
+            color: white;
+        }
+
+        .difficulty-radio:checked + .difficulty-label.medium {
+            border-color: #ffc107;
+            background: #ffc107;
+            color: white;
+        }
+
+        .difficulty-radio:checked + .difficulty-label.hard {
+            border-color: #dc3545;
+            background: #dc3545;
+            color: white;
         }
 
     .answers-wrapper {
@@ -244,51 +337,74 @@
 <div class="create-questions-page">
     <div class="create-container">
         <div class="create-header">
-            <h2 class="create-title">➕ Yeni Suallar Əlavə Et</h2>
+            <h2 class="create-title">Yeni Suallar Əlavə Et</h2>
         </div>
 
         <form asp-action="CreateQuestions" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="validation-summary-errors"></div>
+
             <div id="questions" class="questions-wrapper">
                 <div class="question-card-create">
                     <div class="question-card-header">
                         <h4 class="question-title-create">
-                            📝 Sual <span class="question-index">1</span>
+                            Sual <span class="question-index">1</span>
                         </h4>
                         <button type="button" class="delete-question-btn delete-question">
-                            🗑️ Sualı Sil
+                            Sualı Sil
                         </button>
                     </div>
 
                     <div class="field-group">
-                        <label class="field-label">Sual Mətni</label>
-                        <input type="text" name="models[0].Text" class="field-input" placeholder="Sualı daxil edin..." />
+                        <label class="field-label">Sual Mətni *</label>
+                        <input type="text" name="models[0].Text" class="field-input" placeholder="Sualı daxil edin..." required />
+                        <span class="field-validation-error" data-valmsg-for="models[0].Text"></span>
                     </div>
 
                     <div class="field-group">
-                        <label class="field-label">🖼️ Şəkil Yüklə (istəyə bağlı)</label>
-                        <input type="file" name="models[0].ImageFile" class="field-input" />
+                        <label class="field-label">Çətinlik Dərəcəsi *</label>
+                        <div class="difficulty-select-wrapper">
+                            <div class="difficulty-option">
+                                <input type="radio" name="models[0].Difficulty" value="1" class="difficulty-radio" id="q0_diff_easy" checked />
+                                <label for="q0_diff_easy" class="difficulty-label easy">Asan</label>
+                            </div>
+                            <div class="difficulty-option">
+                                <input type="radio" name="models[0].Difficulty" value="2" class="difficulty-radio" id="q0_diff_medium" />
+                                <label for="q0_diff_medium" class="difficulty-label medium">Orta</label>
+                            </div>
+                            <div class="difficulty-option">
+                                <input type="radio" name="models[0].Difficulty" value="3" class="difficulty-radio" id="q0_diff_hard" />
+                                <label for="q0_diff_hard" class="difficulty-label hard">Çətin</label>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="field-group">
-                        <label class="field-label">📚 Kataloq Seçin</label>
-                        <select name="models[0].CatalogId" class="field-input">
+                        <label class="field-label">Şəkil Yüklə (istəyə bağlı)</label>
+                        <input type="file" name="models[0].ImageFile" class="field-input" accept="image/*" />
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">Kataloq Seçin *</label>
+                        <select name="models[0].CatalogId" class="field-input" required>
+                            <option value="">-- Kataloq seçin --</option>
                             @foreach (var catalog in ViewBag.Catalogs)
                             {
                                 <option value="@catalog.Id">@catalog.Title</option>
                             }
                         </select>
+                        <span class="field-validation-error" data-valmsg-for="models[0].CatalogId"></span>
                     </div>
 
                     <div class="answers-wrapper">
-                        <h5 class="answers-title-small">💡 Cavablar</h5>
+                        <h5 class="answers-title-small">Cavablar</h5>
                         <div class="answers">
                             <div class="answer-item-create">
                                 <input type="text" name="models[0].Answers[0].Text"
-                                       class="answer-input-create" placeholder="Cavab 1" />
+                                       class="answer-input-create" placeholder="Cavab 1" required />
                                 <div class="correct-check-wrapper">
                                     <input type="checkbox" name="models[0].Answers[0].IsCorrect"
                                            value="true" id="q0_a0" />
-                                    <label for="q0_a0">✓ Doğru Cavab</label>
+                                    <label for="q0_a0">Doğru Cavab</label>
                                 </div>
                             </div>
                         </div>
@@ -301,10 +417,10 @@
 
             <div class="main-actions">
                 <button type="button" class="btn-add-question" onclick="addQuestion()">
-                    ➕ Yeni Sual Əlavə Et
+                    Yeni Sual Əlavə Et
                 </button>
                 <button type="submit" class="btn-submit-all">
-                    💾 Hamısını Saxla
+                    Hamısını Saxla
                 </button>
             </div>
         </form>
@@ -312,6 +428,7 @@
 </div>
 
 @section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
         let questionCount = document.querySelectorAll(".question-card-create").length;
 
@@ -321,43 +438,64 @@
                 <div class="question-card-create">
                     <div class="question-card-header">
                         <h4 class="question-title-create">
-                            📝 Sual <span class="question-index">${index + 1}</span>
+                            Sual <span class="question-index">${index + 1}</span>
                         </h4>
                         <button type="button" class="delete-question-btn delete-question">
-                            🗑️ Sualı Sil
+                            Sualı Sil
                         </button>
                     </div>
 
                     <div class="field-group">
-                        <label class="field-label">Sual Mətni</label>
-                        <input type="text" name="models[${index}].Text" class="field-input" placeholder="Sualı daxil edin..." />
+                        <label class="field-label">Sual Mətni *</label>
+                        <input type="text" name="models[${index}].Text" class="field-input" placeholder="Sualı daxil edin..." required />
+                        <span class="field-validation-error" data-valmsg-for="models[${index}].Text"></span>
                     </div>
 
                     <div class="field-group">
-                        <label class="field-label">🖼️ Şəkil Yüklə (istəyə bağlı)</label>
-                        <input type="file" name="models[${index}].ImageFile" class="field-input" />
+                        <label class="field-label">Çətinlik Dərəcəsi *</label>
+                        <div class="difficulty-select-wrapper">
+                            <div class="difficulty-option">
+                                <input type="radio" name="models[${index}].Difficulty" value="1" class="difficulty-radio" id="q${index}_diff_easy" checked />
+                                <label for="q${index}_diff_easy" class="difficulty-label easy">Asan</label>
+                            </div>
+                            <div class="difficulty-option">
+                                <input type="radio" name="models[${index}].Difficulty" value="2" class="difficulty-radio" id="q${index}_diff_medium" />
+                                <label for="q${index}_diff_medium" class="difficulty-label medium">Orta</label>
+                            </div>
+                            <div class="difficulty-option">
+                                <input type="radio" name="models[${index}].Difficulty" value="3" class="difficulty-radio" id="q${index}_diff_hard" />
+                                <label for="q${index}_diff_hard" class="difficulty-label hard">Çətin</label>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="field-group">
-                        <label class="field-label">📚 Kataloq Seçin</label>
-                        <select name="models[${index}].CatalogId" class="field-input">
+                        <label class="field-label">Şəkil Yüklə (istəyə bağlı)</label>
+                        <input type="file" name="models[${index}].ImageFile" class="field-input" accept="image/*" />
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">Kataloq Seçin *</label>
+                        <select name="models[${index}].CatalogId" class="field-input" required>
+                            <option value="">-- Kataloq seçin --</option>
                             @foreach (var catalog in ViewBag.Catalogs)
                             {
                                 <option value="@catalog.Id">@catalog.Title</option>
                             }
                         </select>
+                        <span class="field-validation-error" data-valmsg-for="models[${index}].CatalogId"></span>
                     </div>
 
                     <div class="answers-wrapper">
-                        <h5 class="answers-title-small">💡 Cavablar</h5>
+                        <h5 class="answers-title-small">Cavablar</h5>
                         <div class="answers">
                             <div class="answer-item-create">
                                 <input type="text" name="models[${index}].Answers[0].Text"
-                                       class="answer-input-create" placeholder="Cavab 1" />
+                                       class="answer-input-create" placeholder="Cavab 1" required />
                                 <div class="correct-check-wrapper">
                                     <input type="checkbox" name="models[${index}].Answers[0].IsCorrect"
                                            value="true" id="q${index}_a0" />
-                                    <label for="q${index}_a0">✓ Doğru Cavab</label>
+                                    <label for="q${index}_a0">Doğru Cavab</label>
                                 </div>
                             </div>
                         </div>
@@ -381,11 +519,11 @@
                 let html = `
                     <div class="answer-item-create">
                         <input type="text" name="models[${questionIndex}].Answers[${answerCount}].Text"
-                               class="answer-input-create" placeholder="Cavab ${answerCount + 1}" />
+                               class="answer-input-create" placeholder="Cavab ${answerCount + 1}" required />
                         <div class="correct-check-wrapper">
                             <input type="checkbox" name="models[${questionIndex}].Answers[${answerCount}].IsCorrect"
                                    value="true" id="q${questionIndex}_a${answerCount}" />
-                            <label for="q${questionIndex}_a${answerCount}">✓ Doğru Cavab</label>
+                            <label for="q${questionIndex}_a${answerCount}">Doğru Cavab</label>
                         </div>
                     </div>
                 `;
@@ -398,7 +536,7 @@
                     questionDiv.remove();
                     updateQuestionIndexes();
                 } else {
-                    alert("❌ Ən azı bir sual olmalıdır!");
+                    alert("Ən azı bir sual olmalıdır!");
                 }
             }
         });
@@ -407,10 +545,19 @@
             let questionItems = document.querySelectorAll(".question-card-create");
             questionItems.forEach((item, i) => {
                 item.querySelector(".question-index").textContent = i + 1;
-
                 item.querySelector("input[name^='models'][type='text']").setAttribute("name", `models[${i}].Text`);
+
+                // Difficulty radio buttons
+                let diffRadios = item.querySelectorAll("input[type='radio'][name*='Difficulty']");
+                diffRadios.forEach((radio, idx) => {
+                    radio.setAttribute("name", `models[${i}].Difficulty`);
+                    radio.id = `q${i}_diff_${['easy','medium','hard'][idx]}`;
+                    radio.nextElementSibling.setAttribute("for", radio.id);
+                });
+
                 let fileInput = item.querySelector("input[type='file']");
                 if (fileInput) fileInput.setAttribute("name", `models[${i}].ImageFile`);
+
                 item.querySelector("select[name^='models']").setAttribute("name", `models[${i}].CatalogId`);
 
                 let answerItems = item.querySelectorAll(".answer-item-create");
@@ -421,6 +568,7 @@
 
                     inputText.setAttribute("name", `models[${i}].Answers[${j}].Text`);
                     inputText.placeholder = `Cavab ${j + 1}`;
+
                     inputCheckbox.setAttribute("name", `models[${i}].Answers[${j}].IsCorrect`);
                     inputCheckbox.id = `q${i}_a${j}`;
                     label.setAttribute("for", `q${i}_a${j}`);
@@ -429,5 +577,36 @@
 
             questionCount = questionItems.length;
         }
+
+        document.querySelector('form').addEventListener('submit', function(e) {
+            let hasErrors = false;
+            let errorMessages = [];
+
+            document.querySelectorAll('.question-card-create').forEach((card, index) => {
+                let textInput = card.querySelector('input[name$=".Text"]');
+                let catalogSelect = card.querySelector('select[name$=".CatalogId"]');
+
+                if (!textInput.value.trim()) {
+                    hasErrors = true;
+                    errorMessages.push(`Sual ${index + 1}: Sual mətni boş ola bilməz`);
+                }
+
+                if (!catalogSelect.value) {
+                    hasErrors = true;
+                    errorMessages.push(`Sual ${index + 1}: Kataloq seçilməlidir`);
+                }
+
+                let answers = card.querySelectorAll('.answer-item-create input[type="text"]');
+                if (answers.length === 0) {
+                    hasErrors = true;
+                    errorMessages.push(`Sual ${index + 1}: Ən azı bir cavab olmalıdır`);
+                }
+            });
+
+            if (hasErrors) {
+                e.preventDefault();
+                alert('Xətalar:\n\n' + errorMessages.join('\n'));
+            }
+        });
     </script>
 }

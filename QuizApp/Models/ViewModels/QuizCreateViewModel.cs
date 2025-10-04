@@ -23,9 +23,17 @@ namespace QuizApp.Models.ViewModels
 
         public IFormFile? Image { get; set; }
 
+        [Range(0, 100)]
+        public int EasyQuestionCount { get; set; } = 0;
+
+        [Range(0, 100)]
+        public int MediumQuestionCount { get; set; } = 0;
+
+        [Range(0, 100)]
+        public int HardQuestionCount { get; set; } = 0;
+
 
     }
-
 
 }
 

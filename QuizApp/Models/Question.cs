@@ -20,6 +20,9 @@ namespace QuizApp.Models
 
         public string? ImageUrl { get; set; }
 
+        [Required]
+        public QuestionDifficulty Difficulty { get; set; } = QuestionDifficulty.Medium;
+
         public virtual ICollection<Answer> Answers { get; set; } = new HashSet<Answer>();
 
         public ICollection<QuizQuestion> QuizQuestions { get; set; }

@@ -273,16 +273,44 @@
 </div>
 
 <script>
+    var quizId = "@Model.QuizId";
+    var storageKey = "quiz_" + quizId + "_timeRemaining";
+    var startTimeKey = "quiz_" + quizId + "_startTime";
     var totalTime = @Model.DurationInMinutes * 60;
+
     var timerDisplay = document.getElementById("timer");
     var timerContainer = document.getElementById("timerContainer");
     var submitButton = document.getElementById("submitButton");
+
+    // Əgər əvvəlcədən başlanmış quiz varsa, qalan vaxtı götür
+    function initializeTimer() {
+        var savedTime = sessionStorage.getItem(storageKey);
+        var savedStartTime = sessionStorage.getItem(startTimeKey);
+
+        if (savedTime !== null && savedStartTime !== null) {
+            // Əvvəlki qalan vaxtı götür
+            var storedRemaining = parseInt(savedTime);
+            var storedStart = parseInt(savedStartTime);
+            var currentTime = Math.floor(Date.now() / 1000);
+            var elapsedSinceLastSave = currentTime - storedStart;
+
+            // Real qalan vaxtı hesabla
+            totalTime = Math.max(0, storedRemaining - elapsedSinceLastSave);
+        } else {
+            // İlk dəfə başlayırsa, başlanğıc vaxtını saxla
+            sessionStorage.setItem(startTimeKey, Math.floor(Date.now() / 1000));
+        }
+    }
 
     function updateTimer() {
         var minutes = Math.floor(totalTime / 60);
         var seconds = totalTime % 60;
 
         timerDisplay.textContent = minutes.toString().padStart(2, '0') + ":" + seconds.toString().padStart(2, '0');
+
+        // Qalan vaxtı və hazırkı zamanı saxla
+        sessionStorage.setItem(storageKey, totalTime);
+        sessionStorage.setItem(startTimeKey, Math.floor(Date.now() / 1000));
 
         if (totalTime <= 60) {
             timerContainer.classList.add('timer-warning');
@@ -291,6 +319,9 @@
         if (totalTime <= 0) {
             submitButton.disabled = true;
             submitButton.textContent = "⏱ Vaxt Bitdi!";
+            // Storage-ı təmizlə
+            sessionStorage.removeItem(storageKey);
+            sessionStorage.removeItem(startTimeKey);
             document.getElementById("quizForm").submit();
         } else {
             totalTime--;
@@ -299,6 +330,13 @@
     }
 
     window.onload = function () {
+        initializeTimer();
         updateTimer();
     };
+
+    // Form submit olunanda storage-ı təmizlə
+    document.getElementById("quizForm").addEventListener("submit", function() {
+        sessionStorage.removeItem(storageKey);
+        sessionStorage.removeItem(startTimeKey);
+    });
 </script>

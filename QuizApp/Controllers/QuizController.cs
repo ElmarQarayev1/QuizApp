@@ -117,12 +117,13 @@ namespace QuizApp.Controllers
 
             return View(model);
         }
-
         [ValidateAntiForgeryToken]
         [HttpPost]
         public IActionResult CreateQuiz(QuizCreateViewModel model)
         {
-            if (string.IsNullOrWhiteSpace(model.Title) || model.DurationInMinutes == null || model.SelectedQuestionIds == null || !model.SelectedQuestionIds.Any())
+            if (string.IsNullOrWhiteSpace(model.Title) ||
+                model.DurationInMinutes == null ||
+                !model.SelectedCatalogId.HasValue)
             {
                 model.ExistingCatalogs = _context.Catalogs
                     .Select(q => new SelectListItem
@@ -131,7 +132,77 @@ namespace QuizApp.Controllers
                         Text = q.Title
                     }).ToList();
 
-                ModelState.AddModelError("", "Zəhmət olmasa bütün sahələri doldurun və ən azı bir sual seçin.");
+                ModelState.AddModelError("", "Zəhmət olmasa bütün sahələri doldurun.");
+                return View(model);
+            }
+
+            int totalQuestions = model.EasyQuestionCount + model.MediumQuestionCount + model.HardQuestionCount;
+
+            if (totalQuestions == 0)
+            {
+                model.ExistingCatalogs = _context.Catalogs
+                    .Select(q => new SelectListItem
+                    {
+                        Value = q.Id.ToString(),
+                        Text = q.Title
+                    }).ToList();
+
+                ModelState.AddModelError("", "Ən azı bir sual seçin.");
+                return View(model);
+            }
+
+            // Seçilmiş kataloqdan çətinlik dərəcəsinə görə sualları gətir
+            var selectedQuestionIds = new List<int>();
+
+            // Asan suallar
+            if (model.EasyQuestionCount > 0)
+            {
+                var easyQuestions = _context.Questions
+                    .Where(q => q.CatalogId == model.SelectedCatalogId && q.Difficulty == QuestionDifficulty.Easy)
+                    .OrderBy(x => Guid.NewGuid())
+                    .Take(model.EasyQuestionCount)
+                    .Select(q => q.Id)
+                    .ToList();
+
+                selectedQuestionIds.AddRange(easyQuestions);
+            }
+
+            // Orta suallar
+            if (model.MediumQuestionCount > 0)
+            {
+                var mediumQuestions = _context.Questions
+                    .Where(q => q.CatalogId == model.SelectedCatalogId && q.Difficulty == QuestionDifficulty.Medium)
+                    .OrderBy(x => Guid.NewGuid())
+                    .Take(model.MediumQuestionCount)
+                    .Select(q => q.Id)
+                    .ToList();
+
+                selectedQuestionIds.AddRange(mediumQuestions);
+            }
+
+            // Çətin suallar
+            if (model.HardQuestionCount > 0)
+            {
+                var hardQuestions = _context.Questions
+                    .Where(q => q.CatalogId == model.SelectedCatalogId && q.Difficulty == QuestionDifficulty.Hard)
+                    .OrderBy(x => Guid.NewGuid())
+                    .Take(model.HardQuestionCount)
+                    .Select(q => q.Id)
+                    .ToList();
+
+                selectedQuestionIds.AddRange(hardQuestions);
+            }
+
+            if (selectedQuestionIds.Count < totalQuestions)
+            {
+                model.ExistingCatalogs = _context.Catalogs
+                    .Select(q => new SelectListItem
+                    {
+                        Value = q.Id.ToString(),
+                        Text = q.Title
+                    }).ToList();
+
+                ModelState.AddModelError("", $"Seçilmiş kataloqda kifayət qədər sual yoxdur. Tələb olunan: {totalQuestions}, Mövcud: {selectedQuestionIds.Count}");
                 return View(model);
             }
 
@@ -140,7 +211,7 @@ namespace QuizApp.Controllers
                 Title = model.Title,
                 CreatedAt = DateTime.Now,
                 DurationInMinutes = model.DurationInMinutes,
-                QuizQuestions = model.SelectedQuestionIds.Select(qid => new QuizQuestion
+                QuizQuestions = selectedQuestionIds.Select(qid => new QuizQuestion
                 {
                     QuestionId = qid
                 }).ToList()
@@ -338,6 +409,7 @@ namespace QuizApp.Controllers
                 {
                     Text = model.Text,
                     CatalogId = catalog.Id,
+                    Difficulty = model.Difficulty, // YENİ
                     ImageUrl = imageUrl,
                     Answers = model.Answers.Select(a => new Answer
                     {
@@ -359,10 +431,8 @@ namespace QuizApp.Controllers
                 return View(models);
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("CreateQuiz");
         }
-
-      
         public IActionResult EditQuestion(int id)
         {
             var question = _context.Questions
@@ -377,6 +447,7 @@ namespace QuizApp.Controllers
                 Id = question.Id,
                 Text = question.Text,
                 CatalogId = question.CatalogId ?? 0,
+                Difficulty = question.Difficulty, // YENİ
                 ImageUrl = question.ImageUrl,
                 Answers = question.Answers.Select(a => new AnswerEditViewModel
                 {
@@ -389,6 +460,7 @@ namespace QuizApp.Controllers
             ViewBag.Catalogs = _context.Catalogs.ToList();
             return View(model);
         }
+
 
         [ValidateAntiForgeryToken]
         [HttpPost]
@@ -408,8 +480,8 @@ namespace QuizApp.Controllers
 
             question.Text = model.Text;
             question.CatalogId = model.CatalogId;
+            question.Difficulty = model.Difficulty; // YENİ
 
-          
             if (model.DeleteImage && !string.IsNullOrEmpty(question.ImageUrl))
             {
                 var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", question.ImageUrl.TrimStart('/'));
@@ -419,10 +491,8 @@ namespace QuizApp.Controllers
                 }
                 question.ImageUrl = null;
             }
-            
             else if (model.ImageFile != null)
             {
-               
                 if (!string.IsNullOrEmpty(question.ImageUrl))
                 {
                     var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", question.ImageUrl.TrimStart('/'));
@@ -432,7 +502,6 @@ namespace QuizApp.Controllers
                     }
                 }
 
-               
                 var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/questions");
                 if (!Directory.Exists(uploadsFolder))
                     Directory.CreateDirectory(uploadsFolder);
@@ -448,11 +517,9 @@ namespace QuizApp.Controllers
                 question.ImageUrl = "/uploads/questions/" + uniqueFileName;
             }
 
-         
             var existingAnswerIds = question.Answers.Select(a => a.Id).ToList();
             var modelAnswerIds = model.Answers.Where(a => a.Id > 0).Select(a => a.Id).ToList();
 
-          
             var answersToDelete = question.Answers.Where(a => !modelAnswerIds.Contains(a.Id)).ToList();
             _context.Answers.RemoveRange(answersToDelete);
 
@@ -460,7 +527,6 @@ namespace QuizApp.Controllers
             {
                 if (answerModel.Id > 0)
                 {
-                    
                     var answer = question.Answers.FirstOrDefault(a => a.Id == answerModel.Id);
                     if (answer != null)
                     {
@@ -470,7 +536,6 @@ namespace QuizApp.Controllers
                 }
                 else
                 {
-                    
                     question.Answers.Add(new Answer
                     {
                         Text = answerModel.Text,
